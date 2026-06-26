@@ -47,7 +47,7 @@ export default function AdminLoginMobile() {
       flexDirection: 'column',
       justifyContent: 'center',
       padding: '2rem 1.5rem',
-      background: 'radial-gradient(circle at 50% 30%, rgba(245, 158, 11, 0.08) 0%, transparent 70%)'
+      background: 'radial-gradient(circle at 50% 30%, rgba(var(--primary-rgb), 0.08) 0%, transparent 70%)'
     }} className="animate-fade-in">
       
       {/* Brand & Logo */}

@@ -46,7 +46,7 @@ export default function AdminLoginDesktop() {
       alignItems: 'center',
       justifyContent: 'center',
       padding: '4rem 1.5rem',
-      background: 'radial-gradient(circle at 50% 30%, rgba(245, 158, 11, 0.06) 0%, transparent 60%)'
+      background: 'radial-gradient(circle at 50% 30%, rgba(var(--primary-rgb), 0.06) 0%, transparent 60%)'
     }} className="animate-fade-in">
       
       <div style={{ width: '100%', maxWidth: '440px' }} className="animate-slide-up">

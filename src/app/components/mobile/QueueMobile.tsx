@@ -89,8 +89,8 @@ export default function QueueMobile() {
           <div className="glass" style={{
             borderRadius: '1rem',
             padding: '1.5rem',
-            border: '1px solid rgba(245, 158, 11, 0.25)',
-            background: 'linear-gradient(180deg, rgba(24, 24, 28, 0.9) 0%, rgba(18, 18, 21, 0.9) 100%)'
+            border: '1px solid rgba(var(--primary-rgb), 0.25)',
+            background: 'linear-gradient(180deg, var(--surface) 0%, var(--background) 100%)'
           }}>
             <span style={{ color: 'var(--primary)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
               Sedang Dicukur ✂️
@@ -104,7 +104,7 @@ export default function QueueMobile() {
                   color: 'var(--primary)',
                   lineHeight: 1,
                   marginBottom: '0.5rem',
-                  textShadow: '0 0 15px rgba(245, 158, 11, 0.25)'
+                  textShadow: '0 0 15px rgba(var(--primary-rgb), 0.25)'
                 }}>
                   {servingItem.queueNumber}
                 </div>
@@ -172,8 +172,8 @@ export default function QueueMobile() {
                       alignItems: 'center',
                       padding: '0.85rem 1rem',
                       borderRadius: '0.5rem',
-                      backgroundColor: isServing ? 'rgba(245, 158, 11, 0.05)' : 'var(--surface)',
-                      border: `1px solid ${isServing ? 'rgba(245,158,11,0.2)' : 'var(--surface-border)'}`
+                      backgroundColor: isServing ? 'rgba(var(--primary-rgb), 0.05)' : 'var(--surface)',
+                      border: `1px solid ${isServing ? 'rgba(var(--primary-rgb), 0.2)' : 'var(--surface-border)'}`
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>

@@ -113,9 +113,9 @@ export default function QueueDesktop() {
               <div className="glass animate-slide-up" style={{
                 borderRadius: '1.5rem',
                 padding: '3rem',
-                border: '1px solid rgba(245, 158, 11, 0.3)',
-                boxShadow: '0 20px 40px rgba(245, 158, 11, 0.06)',
-                background: 'linear-gradient(180deg, #16161a 0%, #0d0d10 100%)',
+                border: '1px solid rgba(var(--primary-rgb), 0.3)',
+                boxShadow: '0 20px 40px rgba(var(--primary-rgb), 0.06)',
+                background: 'linear-gradient(180deg, var(--surface) 0%, var(--background) 100%)',
                 textAlign: 'center'
               }}>
                 <span style={{ 
@@ -124,10 +124,10 @@ export default function QueueDesktop() {
                   fontWeight: 800, 
                   textTransform: 'uppercase', 
                   letterSpacing: '2px',
-                  border: '1px solid rgba(245, 158, 11, 0.2)',
+                  border: '1px solid rgba(var(--primary-rgb), 0.2)',
                   padding: '0.35rem 1rem',
                   borderRadius: '50px',
-                  background: 'rgba(245,158,11,0.04)',
+                  background: 'rgba(var(--primary-rgb), 0.04)',
                   display: 'inline-block',
                   marginBottom: '1.5rem'
                 }}>
@@ -143,7 +143,7 @@ export default function QueueDesktop() {
                       lineHeight: 0.9,
                       letterSpacing: '-4px',
                       marginBottom: '1.5rem',
-                      textShadow: '0 0 30px rgba(245, 158, 11, 0.4)'
+                      textShadow: '0 0 30px rgba(var(--primary-rgb), 0.4)'
                     }}>
                       {servingItem.queueNumber}
                     </div>
@@ -235,9 +235,9 @@ export default function QueueDesktop() {
                     alignItems: 'center',
                     padding: '1.25rem 1.5rem',
                     borderRadius: '0.75rem',
-                    backgroundColor: 'rgba(245, 158, 11, 0.06)',
-                    border: '1px solid rgba(245, 158, 11, 0.3)',
-                    boxShadow: '0 4px 15px rgba(245, 158, 11, 0.05)'
+                    backgroundColor: 'rgba(var(--primary-rgb), 0.06)',
+                    border: '1px solid rgba(var(--primary-rgb), 0.3)',
+                    boxShadow: '0 4px 15px rgba(var(--primary-rgb), 0.05)'
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
                       <span style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--primary)' }}>

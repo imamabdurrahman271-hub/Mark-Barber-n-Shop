@@ -435,11 +435,11 @@ export default function AdminDesktop() {
                             <span style={{
                               padding: '0.2rem 0.6rem',
                               borderRadius: '4px',
-                              backgroundColor: isServing ? 'rgba(245, 158, 11, 0.1)' : 'rgba(255,255,255,0.03)',
+                              backgroundColor: isServing ? 'rgba(var(--primary-rgb), 0.1)' : 'rgba(255,255,255,0.03)',
                               color: isServing ? 'var(--primary)' : 'var(--foreground-muted)',
                               fontSize: '0.7rem',
                               fontWeight: 700,
-                              border: `1px solid ${isServing ? 'rgba(245, 158, 11, 0.2)' : 'var(--surface-border)'}`
+                              border: `1px solid ${isServing ? 'rgba(var(--primary-rgb), 0.2)' : 'var(--surface-border)'}`
                             }}>
                               {isServing ? 'SEDANG DICUKUR' : 'MENUNGGU'}
                             </span>
@@ -600,7 +600,7 @@ export default function AdminDesktop() {
                       <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                         <span style={{ width: '50px', fontSize: '0.85rem', color: 'var(--foreground-muted)', textAlign: 'right' }}>{item.label}</span>
                         <div style={{ flex: 1, height: '20px', backgroundColor: 'var(--surface-hover)', borderRadius: '4px', overflow: 'hidden' }}>
-                          <div style={{ width: `${pct}%`, height: '100%', background: 'linear-gradient(90deg, #d97706 0%, #f59e0b 100%)', borderRadius: '4px' }}></div>
+                          <div style={{ width: `${pct}%`, height: '100%', background: 'linear-gradient(90deg, var(--primary-hover) 0%, var(--primary) 100%)', borderRadius: '4px' }}></div>
                         </div>
                         <span style={{ width: '90px', fontSize: '0.85rem', fontWeight: 700, color: '#fff' }}>Rp {item.value.toLocaleString('id-ID')}</span>
                       </div>

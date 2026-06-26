@@ -685,11 +685,11 @@ export default function BookDesktop() {
               <div style={{
                 padding: '0.35rem 1rem',
                 borderRadius: '50px',
-                backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                backgroundColor: 'rgba(var(--primary-rgb), 0.1)',
                 color: 'var(--primary)',
                 fontSize: '0.8rem',
                 fontWeight: 700,
-                border: '1px solid rgba(245, 158, 11, 0.2)'
+                border: '1px solid rgba(var(--primary-rgb), 0.2)'
               }}>
                 Menunggu Verifikasi
               </div>

@@ -16,7 +16,7 @@ export default function HomeMobile() {
       {/* Mobile Hero Section */}
       <section style={{
         padding: '4rem 1rem 3rem 1rem',
-        background: 'radial-gradient(circle at 50% 20%, rgba(245, 158, 11, 0.1) 0%, transparent 70%)',
+        background: 'radial-gradient(circle at 50% 20%, rgba(var(--primary-rgb), 0.1) 0%, transparent 70%)',
         textAlign: 'center',
         borderBottom: '1px solid var(--surface-border)'
       }}>
@@ -28,10 +28,10 @@ export default function HomeMobile() {
           textTransform: 'uppercase',
           display: 'inline-block',
           marginBottom: '0.75rem',
-          border: '1px solid rgba(245, 158, 11, 0.3)',
+          border: '1px solid rgba(var(--primary-rgb), 0.3)',
           padding: '0.2rem 0.6rem',
           borderRadius: '50px',
-          background: 'rgba(245, 158, 11, 0.03)'
+          background: 'rgba(var(--primary-rgb), 0.03)'
         }}>
           Solo Barbershop
         </span>

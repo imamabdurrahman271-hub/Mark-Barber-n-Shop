@@ -488,7 +488,7 @@ export default function BookMobile() {
                 <span style={{ fontSize: '0.65rem', color: 'var(--foreground-muted)' }}>ID Booking</span>
                 <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--primary)' }}>{createdBooking.id}</h4>
               </div>
-              <span style={{ padding: '0.2rem 0.5rem', borderRadius: '4px', backgroundColor: 'rgba(245, 158, 11, 0.08)', color: 'var(--primary)', fontSize: '0.65rem', fontWeight: 700 }}>
+              <span style={{ padding: '0.2rem 0.5rem', borderRadius: '4px', backgroundColor: 'rgba(var(--primary-rgb), 0.08)', color: 'var(--primary)', fontSize: '0.65rem', fontWeight: 700 }}>
                 PENDING
               </span>
             </div>

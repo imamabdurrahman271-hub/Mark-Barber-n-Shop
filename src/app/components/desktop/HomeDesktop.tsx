@@ -17,7 +17,7 @@ export default function HomeDesktop() {
       <section style={{
         position: 'relative',
         padding: '8rem 0 6rem 0',
-        background: 'radial-gradient(circle at 50% 30%, rgba(245, 158, 11, 0.08) 0%, transparent 60%)',
+        background: 'radial-gradient(circle at 50% 30%, rgba(var(--primary-rgb), 0.08) 0%, transparent 60%)',
         textAlign: 'center',
         borderBottom: '1px solid var(--surface-border)'
       }}>
@@ -30,10 +30,10 @@ export default function HomeDesktop() {
             textTransform: 'uppercase',
             display: 'inline-block',
             marginBottom: '1rem',
-            border: '1px solid rgba(245, 158, 11, 0.3)',
+            border: '1px solid rgba(var(--primary-rgb), 0.3)',
             padding: '0.25rem 0.75rem',
             borderRadius: '50px',
-            background: 'rgba(245, 158, 11, 0.05)'
+            background: 'rgba(var(--primary-rgb), 0.05)'
           }}>
             Premium Solo Barbershop
           </span>
@@ -118,9 +118,9 @@ export default function HomeDesktop() {
                   bottom: '1.5rem',
                   left: '1.5rem',
                   right: '1.5rem',
-                  background: 'rgba(9, 9, 11, 0.9)',
+                  background: 'rgba(0, 0, 0, 0.9)',
                   backdropFilter: 'blur(8px)',
-                  border: '1px solid rgba(245, 158, 11, 0.2)',
+                  border: '1px solid rgba(var(--primary-rgb), 0.2)',
                   padding: '1rem',
                   borderRadius: '1rem',
                   textAlign: 'center'

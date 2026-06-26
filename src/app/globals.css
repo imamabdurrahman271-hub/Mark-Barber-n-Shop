@@ -1,18 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --background-hex: #09090b;
-  --background: #09090b;
-  --surface: #121215;
-  --surface-hover: #1c1c21;
-  --surface-border: #27272a;
-  --foreground: #fafafa;
-  --foreground-muted: #a1a1aa;
+  --background-hex: #050505;
+  --background: #050505;
+  --surface: #0c0c0d;
+  --surface-hover: #141416;
+  --surface-border: #1f1f22;
+  --foreground: #f4ebd0; /* Soft beautiful cream */
+  --foreground-muted: #a49e8f; /* Muted soft cream */
   
-  --primary: #f59e0b; /* Amber/Gold */
-  --primary-hover: #d97706;
-  --primary-rgb: 245, 158, 11;
-  --primary-glow: rgba(245, 158, 11, 0.15);
+  --primary: #ebdcb9; /* Luxury Cream Accent */
+  --primary-hover: #dfcfad; /* Deeper cream on hover */
+  --primary-rgb: 235, 220, 185;
+  --primary-glow: rgba(235, 220, 185, 0.12);
   
   --success: #10b981;
   --success-bg: rgba(16, 185, 129, 0.1);
@@ -104,7 +104,7 @@ html, body {
 .btn-primary:hover {
   background-color: var(--primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
 }
 .btn-primary:active {
   transform: translateY(0);
@@ -142,10 +142,10 @@ html, body {
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+    box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.2);
   }
   50% {
-    box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+    box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.5);
   }
 }
 
