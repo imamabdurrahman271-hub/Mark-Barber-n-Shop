@@ -52,12 +52,30 @@ export default function HomeMobile() {
         }}>
           Dikerjakan langsung oleh owner berpengalaman. Cukur premium, cat rambut fashion, perm, dan dreadlocks di Bandung.
         </p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <a href="/book" className="btn btn-primary glow-pulse" style={{ padding: '0.85rem', width: '100%', fontSize: '0.95rem' }}>
-            Booking Online Sekarang
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: '1fr 1fr', 
+          gap: '0.75rem',
+          width: '100%',
+          marginTop: '0.5rem'
+        }}>
+          <a href="/book" className="btn btn-primary glow-pulse" style={{ 
+            padding: '0.85rem 0.5rem', 
+            fontSize: '0.85rem',
+            whiteSpace: 'nowrap',
+            fontWeight: 600
+          }}>
+            Booking Sekarang
           </a>
-          <a href="/queue" className="btn btn-secondary" style={{ padding: '0.85rem', width: '100%', fontSize: '0.95rem' }}>
-            Pantau Antrian Live
+          <a href="/queue" className="btn btn-secondary" style={{ 
+            padding: '0.85rem 0.5rem', 
+            fontSize: '0.85rem',
+            whiteSpace: 'nowrap',
+            borderColor: 'rgba(235, 220, 185, 0.25)',
+            color: 'var(--primary)',
+            fontWeight: 600
+          }}>
+            Pantau Antrian
           </a>
         </div>
       </section>
