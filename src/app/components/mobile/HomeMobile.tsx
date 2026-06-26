@@ -59,7 +59,7 @@ export default function HomeMobile() {
           fontWeight: 400,
           padding: '0 0.5rem'
         }}>
-          Dikerjakan langsung oleh owner berpengalaman. Cukur premium, cat rambut fashion, perm, dan dreadlocks di Bandung.
+          Dikerjakan langsung oleh owner berpengalaman. Cukur premium, cat rambut fashion, perm, dan dreadlocks di Manna, Bengkulu Selatan.
         </p>
         
         <div style={{ 
@@ -285,7 +285,7 @@ export default function HomeMobile() {
             <div>
               <h5 style={{ color: '#fff', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.2rem' }}>Alamat Galeri</h5>
               <p style={{ color: '#a49e8f', fontSize: '0.8rem', lineHeight: '1.45' }}>
-                Jalan Taman Sari No.42, Bandung, Jawa Barat 40116
+                Manna, Bengkulu Selatan
               </p>
             </div>
           </div>

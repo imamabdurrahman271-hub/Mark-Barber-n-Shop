@@ -56,7 +56,7 @@ export default function HomeDesktop() {
             marginBottom: '2.5rem',
             fontWeight: 300
           }}>
-            Dikerjakan langsung oleh owner berpengalaman. Dapatkan kenyamanan cukur premium, layanan cat rambut fashion, perm, hingga pengerjaan dreadlocks berkualitas di Bandung.
+            Dikerjakan langsung oleh owner berpengalaman. Dapatkan kenyamanan cukur premium, layanan cat rambut fashion, perm, hingga pengerjaan dreadlocks berkualitas di Manna, Bengkulu Selatan.
           </p>
           
           <div style={{
@@ -179,7 +179,7 @@ export default function HomeDesktop() {
               Daftar Layanan Premium
             </h2>
             <p style={{ color: 'var(--foreground-muted)', marginTop: '0.75rem', maxWidth: '600px', margin: '0.75rem auto 0 auto' }}>
-              Pilih dari rangkaian layanan perawatan rambut pria terlengkap di Bandung. Harga transparan dan sudah termasuk cuci rambut serta produk styling berkualitas.
+              Pilih dari rangkaian layanan perawatan rambut pria terlengkap di Manna, Bengkulu Selatan. Harga transparan dan sudah termasuk cuci rambut serta produk styling berkualitas.
             </p>
           </div>
 
@@ -282,7 +282,7 @@ export default function HomeDesktop() {
                 Kunjungi Studio Kami
               </h2>
               <p style={{ color: 'var(--foreground-muted)', lineHeight: '1.6', marginBottom: '2rem' }}>
-                Nikmati suasana potong rambut yang tenang dan personal. Barbershop kami berlokasi strategis di pusat kota Bandung dengan tempat parkir yang memadai.
+                Nikmati suasana potong rambut yang tenang dan personal. Barbershop kami berlokasi strategis di Manna, Bengkulu Selatan dengan tempat parkir yang memadai.
               </p>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -293,7 +293,7 @@ export default function HomeDesktop() {
                   <div>
                     <h4 style={{ color: '#fff', fontWeight: 600, fontSize: '1rem' }}>Alamat Studio</h4>
                     <p style={{ color: 'var(--foreground-muted)', fontSize: '0.9rem', marginTop: '0.2rem' }}>
-                      Jalan Taman Sari No.42, Bandung, Jawa Barat 40116
+                      Manna, Bengkulu Selatan
                     </p>
                   </div>
                 </div>
@@ -351,7 +351,7 @@ export default function HomeDesktop() {
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="1.5" style={{ marginBottom: '1rem' }}><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
                 <h4 style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.5rem' }}>Peta Lokasi Interaktif</h4>
                 <p style={{ fontSize: '0.85rem', marginBottom: '1rem', maxWidth: '300px' }}>
-                  Jalan Taman Sari No.42, Coblong, Kota Bandung (Dekat Institut Teknologi Bandung)
+                  Manna, Bengkulu Selatan
                 </p>
                 <a href="https://maps.google.com" target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}>
                   Buka di Google Maps

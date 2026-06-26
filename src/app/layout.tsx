@@ -129,7 +129,7 @@ export default async function RootLayout({
                 MARK BARBER N SHOP
               </h3>
               <p style={{ lineHeight: '1.6', marginBottom: '1.5rem' }}>
-                Quality over Quantity. Barbershop premium di Bandung dengan fokus pada kualitas hasil cukur dan kenyamanan pelanggan maksimal.
+                Quality over Quantity. Barbershop premium di Manna, Bengkulu Selatan dengan fokus pada kualitas hasil cukur dan kenyamanan pelanggan maksimal.
               </p>
               <div style={{ display: 'flex', gap: '1rem' }}>
                 {/* Social icons */}
@@ -137,7 +137,7 @@ export default async function RootLayout({
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--foreground)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                 </a>
                 <a href="https://whatsapp.com" style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--surface)', border: '1px solid var(--surface-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--foreground)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--foreground)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.5 8.5 0 0 1-7.6-4.7L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                 </a>
               </div>
             </div>
@@ -161,8 +161,8 @@ export default async function RootLayout({
             <div>
               <h3 style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 600, marginBottom: '1.25rem' }}>Lokasi Studio</h3>
               <p style={{ lineHeight: '1.6', marginBottom: '1rem' }}>
-                Jalan Taman Sari No.42,<br />
-                Bandung, Jawa Barat 4116
+                Manna, Bengkulu Selatan,<br />
+                Bengkulu
               </p>
               <a href="https://maps.google.com" target="_blank" rel="noreferrer" style={{ color: 'var(--primary)', fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
