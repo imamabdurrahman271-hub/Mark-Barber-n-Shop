@@ -1,3 +1,5 @@
+import { supabase } from './supabase';
+
 export interface Service {
   id: string;
   title: string;
@@ -156,258 +158,326 @@ export const SOLO_STAFF: Staff = {
   avatarUrl: "https://lh3.googleusercontent.com/l9m1V34JHLZVqb2fWcP94Dq4qK_j-8JzKLs0_IhZBRU7MVcKy3CK9a8lRat7AnBV8FaU3VRfqALenmbN5Uui8d0ligRh6rNgcw"
 };
 
-// 2. Simulasi Database via LocalStorage (Mencegah SSR Crash dengan pengecekan typeof window)
-const isBrowser = () => typeof window !== 'undefined';
+// 2. Realtime & Database Layer dengan Supabase
 
-const getLocalStorageData = <T>(key: string, defaultValue: T): T => {
-  if (!isBrowser()) return defaultValue;
-  const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : defaultValue;
-};
-
-const setLocalStorageData = <T>(key: string, data: T): void => {
-  if (isBrowser()) {
-    localStorage.setItem(key, JSON.stringify(data));
+export const getServices = async (): Promise<Service[]> => {
+  const { data, error } = await supabase
+    .from('services')
+    .select('*')
+    .order('id', { ascending: true });
+    
+  if (error) {
+    console.error('Error fetching services:', error);
+    return SERVICES;
   }
-};
-
-// Pemicu event kustom untuk mensimulasikan realtime subscription di browser
-const triggerQueueUpdate = () => {
-  if (isBrowser()) {
-    window.dispatchEvent(new CustomEvent('queue_update'));
-  }
-};
-
-const triggerBookingUpdate = () => {
-  if (isBrowser()) {
-    window.dispatchEvent(new CustomEvent('booking_update'));
-  }
-};
-
-// Mengisi data transaksi palsu awal agar Laporan Keuangan di Dashboard Admin langsung terlihat menarik saat pertama kali dibuka
-const initializeMockHistory = () => {
-  if (!isBrowser()) return;
-  const bookingsKey = 'barbershop_bookings';
-  const existingBookings = localStorage.getItem(bookingsKey);
   
-  if (!existingBookings) {
-    const mockBookings: Booking[] = [];
-    const today = new Date();
+  return data.map(s => ({
+    id: s.id,
+    title: s.title,
+    price: Number(s.price),
+    durationMins: s.duration_mins,
+    description: s.description,
+    category: s.category
+  }));
+};
+
+export const getBookings = async (): Promise<Booking[]> => {
+  const { data, error } = await supabase
+    .from('bookings')
+    .select('*')
+    .order('created_at', { ascending: false });
     
-    // Hasilkan data transaksi acak selama 7 hari ke belakang
-    const paymentMethods = ['GOPAY', 'DANA', 'OVO', 'QRIS Mandiri', 'QRIS BCA'];
-    const names = ['Budi', 'Joko', 'Andi', 'Rian', 'Fajar', 'Toni', 'Dika', 'Gani', 'Hendra', 'Sony', 'Rudi', 'Bayu', 'Eko', 'Rizky', 'Agus', 'Ivan'];
-    
-    for (let i = 7; i >= 0; i--) {
-      const targetDate = new Date();
-      targetDate.setDate(today.getDate() - i);
-      const dateString = targetDate.toISOString().split('T')[0];
-      
-      // Jumlah transaksi per hari berkisar 2 sampai 5
-      const txCount = Math.floor(Math.random() * 4) + 2;
-      for (let j = 0; j < txCount; j++) {
-        // Jangan membuat booking hari ini otomatis completed agar user bisa mengujinya sendiri
-        const isToday = i === 0;
-        const status = isToday ? 'pending' : 'completed';
-        
-        const service = SERVICES[Math.floor(Math.random() * SERVICES.length)];
-        const hour = 9 + Math.floor(Math.random() * 8); // Jam 9 - 17
-        const minute = Math.random() > 0.5 ? '00' : '30';
-        
-        mockBookings.push({
-          id: `mock-tx-${i}-${j}-${Math.random().toString(36).substr(2, 4)}`,
-          customerName: names[Math.floor(Math.random() * names.length)],
-          customerPhone: `0812345678${Math.floor(10 + Math.random() * 90)}`,
-          serviceId: service.id,
-          staffId: SOLO_STAFF.id,
-          bookingDate: dateString,
-          bookingTime: `${hour.toString().padStart(2, '0')}:${minute}`,
-          status: status,
-          paymentSender: names[Math.floor(Math.random() * names.length)],
-          paymentReference: `TX${Math.floor(100000 + Math.random() * 900000)}`,
-          createdAt: new Date(targetDate.getTime() - (3 * 3600000)).toISOString() // 3 jam sebelumnya
-        });
-      }
-    }
-    
-    localStorage.setItem(bookingsKey, JSON.stringify(mockBookings));
+  if (error) {
+    console.error('Error fetching bookings:', error);
+    return [];
   }
+  
+  return data.map(b => ({
+    id: b.id,
+    customerName: b.customer_name,
+    customerPhone: b.customer_phone,
+    serviceId: b.service_id,
+    staffId: b.staff_id,
+    bookingDate: b.booking_date,
+    bookingTime: b.booking_time,
+    status: b.status,
+    paymentSender: b.payment_sender,
+    paymentReference: b.payment_reference,
+    createdAt: b.created_at
+  }));
 };
 
-// Jalankan inisialisasi history transaksi jika di browser
-if (isBrowser()) {
-  initializeMockHistory();
-}
-
-// 3. API Database Layer (Bisa diganti langsung ke Supabase Client)
-
-/* 
-========================================================================
-PETUNJUK INTEGRASI SUPABASE:
-========================================================================
-1. Install Supabase client: npm install @supabase/supabase-js
-2. Buat file supabaseClient.ts dan inisialisasi client:
-   import { createClient } from '@supabase/supabase-js'
-   export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-   
-3. Ganti fungsi-fungsi di bawah ini dengan query Supabase. Contoh:
-
-   export const getServices = async (): Promise<Service[]> => {
-     const { data, error } = await supabase.from('services').select('*')
-     if (error) throw error
-     return data
-   }
-   
-   export const createBooking = async (booking: Omit<Booking, 'id' | 'createdAt'>): Promise<Booking> => {
-     const { data, error } = await supabase.from('bookings').insert(booking).select().single()
-     if (error) throw error
-     return data
-   }
-========================================================================
-*/
-
-export const getServices = (): Service[] => {
-  return SERVICES;
-};
-
-export const getBookings = (): Booking[] => {
-  return getLocalStorageData<Booking[]>('barbershop_bookings', []);
-};
-
-export const createBooking = (bookingData: Omit<Booking, 'id' | 'status' | 'createdAt'>): Booking => {
-  const bookings = getBookings();
-  const newBooking: Booking = {
-    ...bookingData,
-    id: `book-${Math.random().toString(36).substr(2, 9)}`,
+export const createBooking = async (bookingData: Omit<Booking, 'id' | 'status' | 'createdAt'>): Promise<Booking> => {
+  const newId = `book-${Math.random().toString(36).substr(2, 9)}`;
+  
+  const insertData = {
+    id: newId,
+    customer_name: bookingData.customerName,
+    customer_phone: bookingData.customerPhone,
+    service_id: bookingData.serviceId,
+    staff_id: bookingData.staffId,
+    booking_date: bookingData.bookingDate,
+    booking_time: bookingData.bookingTime,
     status: 'pending',
-    createdAt: new Date().toISOString()
+    payment_sender: bookingData.paymentSender,
+    payment_reference: bookingData.paymentReference
   };
   
-  bookings.push(newBooking);
-  setLocalStorageData('barbershop_bookings', bookings);
-  triggerBookingUpdate();
-  return newBooking;
-};
-
-export const updateBookingStatus = (id: string, status: Booking['status']): Booking | null => {
-  const bookings = getBookings();
-  const index = bookings.findIndex(b => b.id === id);
-  if (index === -1) return null;
-  
-  bookings[index].status = status;
-  setLocalStorageData('barbershop_bookings', bookings);
-  triggerBookingUpdate();
-
-  // Jika status berubah menjadi 'confirmed', masukkan otomatis ke tabel antrian harian (Queues)
-  if (status === 'confirmed') {
-    addToQueue(bookings[index]);
+  const { data, error } = await supabase
+    .from('bookings')
+    .insert(insertData)
+    .select()
+    .single();
+    
+  if (error) {
+    console.error('Error creating booking:', error);
+    throw error;
   }
   
-  return bookings[index];
+  return {
+    id: data.id,
+    customerName: data.customer_name,
+    customerPhone: data.customer_phone,
+    serviceId: data.service_id,
+    staffId: data.staff_id,
+    bookingDate: data.booking_date,
+    bookingTime: data.booking_time,
+    status: data.status,
+    paymentSender: data.payment_sender,
+    paymentReference: data.payment_reference,
+    createdAt: data.created_at
+  };
+};
+
+export const updateBookingStatus = async (id: string, status: Booking['status']): Promise<Booking | null> => {
+  const { data, error } = await supabase
+    .from('bookings')
+    .update({ status })
+    .eq('id', id)
+    .select()
+    .single();
+    
+  if (error) {
+    console.error('Error updating booking status:', error);
+    return null;
+  }
+  
+  const updatedBooking: Booking = {
+    id: data.id,
+    customerName: data.customer_name,
+    customerPhone: data.customer_phone,
+    serviceId: data.service_id,
+    staffId: data.staff_id,
+    bookingDate: data.booking_date,
+    bookingTime: data.booking_time,
+    status: data.status,
+    paymentSender: data.payment_sender,
+    paymentReference: data.payment_reference,
+    createdAt: data.created_at
+  };
+  
+  if (status === 'confirmed') {
+    await addToQueue(updatedBooking);
+  }
+  
+  return updatedBooking;
 };
 
 // Logika Antrian (Queues)
-export const getQueue = (): QueueItem[] => {
-  return getLocalStorageData<QueueItem[]>('barbershop_queues', []);
+export const getQueue = async (): Promise<QueueItem[]> => {
+  const { data, error } = await supabase
+    .from('queue_items')
+    .select('*')
+    .order('created_at', { ascending: true });
+    
+  if (error) {
+    console.error('Error fetching queue:', error);
+    return [];
+  }
+  
+  return data.map(q => ({
+    id: q.id,
+    bookingId: q.booking_id,
+    customerName: q.customer_name,
+    queueNumber: q.queue_number,
+    status: q.status,
+    createdAt: q.created_at,
+    servedAt: q.served_at,
+    serviceTitle: q.service_title,
+    durationMins: q.duration_mins
+  }));
 };
 
-export const addToQueue = (booking: Booking): QueueItem => {
-  const queues = getQueue();
-  const service = SERVICES.find(s => s.id === booking.serviceId) || SERVICES[0];
+export const addToQueue = async (booking: Booking): Promise<QueueItem> => {
+  const { data: existingQueues } = await supabase
+    .from('queue_items')
+    .select('id');
+    
+  const queueCount = existingQueues ? existingQueues.length : 0;
+  const services = await getServices();
+  const service = services.find(s => s.id === booking.serviceId) || SERVICES[0];
   
-  // Hitung nomor antrian berikutnya hari ini (A-01, A-02, dst.)
   const todayPrefix = "A-";
-  const todayQueueCount = queues.length + 1;
-  const queueNumber = `${todayPrefix}${todayQueueCount.toString().padStart(2, '0')}`;
+  const queueNumber = `${todayPrefix}${(queueCount + 1).toString().padStart(2, '0')}`;
+  const newId = `q-${Math.random().toString(36).substr(2, 9)}`;
   
-  const newItem: QueueItem = {
-    id: `q-${Math.random().toString(36).substr(2, 9)}`,
-    bookingId: booking.id,
-    customerName: booking.customerName,
-    queueNumber: queueNumber,
+  const insertData = {
+    id: newId,
+    booking_id: booking.id,
+    customer_name: booking.customerName,
+    queue_number: queueNumber,
     status: 'waiting',
-    createdAt: new Date().toISOString(),
-    servedAt: null,
-    serviceTitle: service.title,
-    durationMins: service.durationMins
+    service_title: service.title,
+    duration_mins: service.durationMins
   };
   
-  queues.push(newItem);
-  setLocalStorageData('barbershop_queues', queues);
-  triggerQueueUpdate();
-  return newItem;
+  const { data, error } = await supabase
+    .from('queue_items')
+    .insert(insertData)
+    .select()
+    .single();
+    
+  if (error) {
+    console.error('Error adding to queue:', error);
+    throw error;
+  }
+  
+  return {
+    id: data.id,
+    bookingId: data.booking_id,
+    customerName: data.customer_name,
+    queueNumber: data.queue_number,
+    status: data.status,
+    createdAt: data.created_at,
+    servedAt: data.served_at,
+    serviceTitle: data.service_title,
+    durationMins: data.duration_mins
+  };
 };
 
 // Tambahkan antrian secara manual (Walk-in)
-export const addWalkInQueue = (customerName: string, serviceId: string): QueueItem => {
-  const queues = getQueue();
-  const service = SERVICES.find(s => s.id === serviceId) || SERVICES[0];
+export const addWalkInQueue = async (customerName: string, serviceId: string): Promise<QueueItem> => {
+  const { data: existingQueues } = await supabase
+    .from('queue_items')
+    .select('id');
+    
+  const queueCount = existingQueues ? existingQueues.length : 0;
+  const services = await getServices();
+  const service = services.find(s => s.id === serviceId) || SERVICES[0];
   
   const todayPrefix = "A-";
-  const todayQueueCount = queues.length + 1;
-  const queueNumber = `${todayPrefix}${todayQueueCount.toString().padStart(2, '0')}`;
+  const queueNumber = `${todayPrefix}${(queueCount + 1).toString().padStart(2, '0')}`;
+  const newId = `q-${Math.random().toString(36).substr(2, 9)}`;
   
-  const newItem: QueueItem = {
-    id: `q-${Math.random().toString(36).substr(2, 9)}`,
-    bookingId: null, // Tanpa booking karena walk-in
-    customerName: customerName,
-    queueNumber: queueNumber,
+  const insertData = {
+    id: newId,
+    booking_id: null,
+    customer_name: customerName,
+    queue_number: queueNumber,
     status: 'waiting',
-    createdAt: new Date().toISOString(),
-    servedAt: null,
-    serviceTitle: service.title,
-    durationMins: service.durationMins
+    service_title: service.title,
+    duration_mins: service.durationMins
   };
   
-  queues.push(newItem);
-  setLocalStorageData('barbershop_queues', queues);
-  triggerQueueUpdate();
-  return newItem;
+  const { data, error } = await supabase
+    .from('queue_items')
+    .insert(insertData)
+    .select()
+    .single();
+    
+  if (error) {
+    console.error('Error adding walk-in to queue:', error);
+    throw error;
+  }
+  
+  return {
+    id: data.id,
+    bookingId: data.booking_id,
+    customerName: data.customer_name,
+    queueNumber: data.queue_number,
+    status: data.status,
+    createdAt: data.created_at,
+    servedAt: data.served_at,
+    serviceTitle: data.service_title,
+    durationMins: data.duration_mins
+  };
 };
 
-export const updateQueueStatus = (id: string, status: QueueItem['status']): QueueItem | null => {
-  const queues = getQueue();
-  const index = queues.findIndex(q => q.id === id);
-  if (index === -1) return null;
-  
-  queues[index].status = status;
+export const updateQueueStatus = async (id: string, status: QueueItem['status']): Promise<QueueItem | null> => {
+  const updateData: any = { status };
   if (status === 'serving') {
-    queues[index].servedAt = new Date().toISOString();
+    updateData.served_at = new Date().toISOString();
   }
   
-  setLocalStorageData('barbershop_queues', queues);
-  triggerQueueUpdate();
-
-  // Jika status antrian selesai (completed), sinkronkan status booking-nya juga menjadi completed
-  if (status === 'completed' && queues[index].bookingId) {
-    const bookings = getBookings();
-    const bIndex = bookings.findIndex(b => b.id === queues[index].bookingId);
-    if (bIndex !== -1) {
-      bookings[bIndex].status = 'completed';
-      setLocalStorageData('barbershop_bookings', bookings);
-      triggerBookingUpdate();
-    }
+  const { data, error } = await supabase
+    .from('queue_items')
+    .update(updateData)
+    .eq('id', id)
+    .select()
+    .single();
+    
+  if (error) {
+    console.error('Error updating queue status:', error);
+    return null;
   }
   
-  return queues[index];
+  const updatedItem: QueueItem = {
+    id: data.id,
+    bookingId: data.booking_id,
+    customerName: data.customer_name,
+    queueNumber: data.queue_number,
+    status: data.status,
+    createdAt: data.created_at,
+    servedAt: data.served_at,
+    serviceTitle: data.service_title,
+    durationMins: data.duration_mins
+  };
+  
+  if (status === 'completed' && updatedItem.bookingId) {
+    await supabase
+      .from('bookings')
+      .update({ status: 'completed' })
+      .eq('id', updatedItem.bookingId);
+  }
+  
+  return updatedItem;
 };
 
-// Berlangganan (Subscribe) perubahan antrian secara Real-time
+// Berlangganan (Subscribe) perubahan secara Real-time via Supabase Channels
 export const subscribeToQueue = (callback: () => void) => {
-  if (!isBrowser()) return () => {};
+  if (typeof window === 'undefined') return () => {};
   
-  window.addEventListener('queue_update', callback);
-  // Kembalikan fungsi unsubscribe
+  const channel = supabase
+    .channel('public:queue_items')
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'queue_items' },
+      () => {
+        callback();
+      }
+    )
+    .subscribe();
+    
   return () => {
-    window.removeEventListener('queue_update', callback);
+    supabase.removeChannel(channel);
   };
 };
 
 export const subscribeToBookings = (callback: () => void) => {
-  if (!isBrowser()) return () => {};
+  if (typeof window === 'undefined') return () => {};
   
-  window.addEventListener('booking_update', callback);
+  const channel = supabase
+    .channel('public:bookings')
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'bookings' },
+      () => {
+        callback();
+      }
+    )
+    .subscribe();
+    
   return () => {
-    window.removeEventListener('booking_update', callback);
+    supabase.removeChannel(channel);
   };
 };

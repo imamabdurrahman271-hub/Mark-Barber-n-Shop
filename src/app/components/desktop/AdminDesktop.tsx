@@ -41,8 +41,8 @@ export default function AdminDesktop() {
   };
 
   const refreshData = () => {
-    setBookings(getBookings());
-    setQueues(getQueue());
+    getBookings().then(setBookings);
+    getQueue().then(setQueues);
   };
 
   useEffect(() => {
@@ -116,45 +116,49 @@ export default function AdminDesktop() {
   const dailyStats = getDailyRevenueStats();
   const maxDailyVal = Math.max(...dailyStats.map(d => d.value), 100000);
 
-  const handleApproveBooking = (id: string) => {
-    updateBookingStatus(id, 'confirmed');
+  const handleApproveBooking = async (id: string) => {
+    await updateBookingStatus(id, 'confirmed');
   };
 
-  const handleCancelBooking = (id: string) => {
+  const handleCancelBooking = async (id: string) => {
     if (confirm("Apakah Anda yakin ingin menolak booking ini?")) {
-      updateBookingStatus(id, 'cancelled');
+      await updateBookingStatus(id, 'cancelled');
     }
   };
 
-  const handleStartServing = (id: string) => {
+  const handleStartServing = async (id: string) => {
     const alreadyServing = queues.some(q => q.status === 'serving');
     if (alreadyServing) {
       alert("Masih ada pelanggan yang sedang dicukur. Selesaikan layanan tersebut terlebih dahulu!");
       return;
     }
-    updateQueueStatus(id, 'serving');
+    await updateQueueStatus(id, 'serving');
   };
 
-  const handleCompleteServing = (id: string) => {
-    updateQueueStatus(id, 'completed');
+  const handleCompleteServing = async (id: string) => {
+    await updateQueueStatus(id, 'completed');
   };
 
-  const handleSkipQueue = (id: string) => {
+  const handleSkipQueue = async (id: string) => {
     if (confirm("Apakah Anda yakin ingin melempar/melewati nomor antrian ini?")) {
-      updateQueueStatus(id, 'skipped');
+      await updateQueueStatus(id, 'skipped');
     }
   };
 
-  const handleAddWalkIn = (e: React.FormEvent) => {
+  const handleAddWalkIn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!walkInName || !walkInServiceId) {
       alert("Lengkapi nama pelanggan dan pilih layanan.");
       return;
     }
-    addWalkInQueue(walkInName, walkInServiceId);
-    setWalkInName('');
-    setWalkInServiceId('');
-    alert("Pelanggan walk-in berhasil dimasukkan ke antrian!");
+    try {
+      await addWalkInQueue(walkInName, walkInServiceId);
+      setWalkInName('');
+      setWalkInServiceId('');
+      alert("Pelanggan walk-in berhasil dimasukkan ke antrian!");
+    } catch (err) {
+      alert("Gagal menambahkan pelanggan walk-in.");
+    }
   };
 
   const handleExportExcel = () => {

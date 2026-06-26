@@ -21,7 +21,7 @@ export default function BookDesktop() {
   const [createdBooking, setCreatedBooking] = useState<Booking | null>(null);
 
   useEffect(() => {
-    setExistingBookings(getBookings());
+    getBookings().then(setExistingBookings);
   }, []);
 
   const selectedService = SERVICES.find(s => s.id === selectedServiceId);
@@ -87,7 +87,7 @@ export default function BookDesktop() {
     setStep(3);
   };
 
-  const handleSubmitBooking = (e: React.FormEvent) => {
+  const handleSubmitBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!customerName || !customerPhone || !paymentSender || !paymentReference) {
       alert("Silakan lengkapi seluruh data pembayaran dan kontak.");
@@ -105,9 +105,13 @@ export default function BookDesktop() {
       paymentReference
     };
 
-    const newBooking = createBooking(bookingInput);
-    setCreatedBooking(newBooking);
-    setStep(4);
+    try {
+      const newBooking = await createBooking(bookingInput);
+      setCreatedBooking(newBooking);
+      setStep(4);
+    } catch (err) {
+      alert("Gagal membuat reservasi. Silakan coba kembali.");
+    }
   };
 
   return (

@@ -7,7 +7,7 @@ export default function QueueMobile() {
   const [queueList, setQueueList] = useState<QueueItem[]>([]);
   
   const fetchQueueData = () => {
-    setQueueList(getQueue());
+    getQueue().then(setQueueList);
   };
 
   useEffect(() => {
