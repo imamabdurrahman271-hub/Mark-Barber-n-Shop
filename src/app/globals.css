@@ -1,49 +1,250 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --background-hex: #09090b;
+  --background: #09090b;
+  --surface: #121215;
+  --surface-hover: #1c1c21;
+  --surface-border: #27272a;
+  --foreground: #fafafa;
+  --foreground-muted: #a1a1aa;
+  
+  --primary: #f59e0b; /* Amber/Gold */
+  --primary-hover: #d97706;
+  --primary-rgb: 245, 158, 11;
+  --primary-glow: rgba(245, 158, 11, 0.15);
+  
+  --success: #10b981;
+  --success-bg: rgba(16, 185, 129, 0.1);
+  --error: #ef4444;
+  --error-bg: rgba(239, 68, 68, 0.1);
+  --info: #3b82f6;
+  --info-bg: rgba(59, 130, 246, 0.1);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html {
-  height: 100%;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  font-family: var(--font-sans);
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+html, body {
+  max-width: 100vw;
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--foreground);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Base Utility Classes */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.glass {
+  background: rgba(18, 18, 21, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--surface-border);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #fff 30%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-border-glow {
+  border: 1px solid var(--primary);
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+
+/* Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: #000;
+}
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--surface-border);
+}
+.btn-secondary:hover {
+  background-color: var(--surface-hover);
+  border-color: var(--foreground-muted);
+}
+
+.btn-danger {
+  background-color: var(--error);
+  color: var(--foreground);
+}
+.btn-danger:hover {
+  background-color: #dc2626;
+  transform: translateY(-1px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
   }
+  50% {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.glow-pulse {
+  animation: pulse-glow 2s infinite;
+}
+
+/* CSS Print Optimizations (PDF Exports) */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+  }
+  
+  /* Hide interactive/web elements */
+  nav, 
+  header, 
+  footer, 
+  button, 
+  .btn, 
+  .no-print,
+  .tabs-container {
+    display: none !important;
+  }
+  
+  /* Reset container backgrounds for clean printing */
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  .glass,
+  .card,
+  .surface {
+    background: #ffffff !important;
+    border: 1px solid #e4e4e7 !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  
+  /* Force text colors to be highly readable on white paper */
+  h1, h2, h3, h4, h5, h6, strong {
+    color: #000000 !important;
+  }
+  
+  p, span, td, th {
+    color: #1f2937 !important;
+  }
+
+  .gold-gradient-text {
+    background: none !important;
+    -webkit-text-fill-color: initial !important;
+    color: #000000 !important;
+  }
+  
+  /* Printable Report Layout */
+  .print-report-header {
+    display: block !important;
+    margin-bottom: 2rem !important;
+    border-bottom: 2px solid #000000 !important;
+    padding-bottom: 1rem !important;
+  }
+  
+  .print-report-title {
+    font-size: 24pt !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+  }
+  
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-top: 1rem !important;
+  }
+  
+  th, td {
+    border: 1px solid #d1d5db !important;
+    padding: 8px !important;
+    text-align: left !important;
+  }
+  
+  th {
+    background-color: #f3f4f6 !important;
+    font-weight: bold !important;
+  }
+}
+
+.print-report-header {
+  display: none;
 }
