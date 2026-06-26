@@ -29,6 +29,17 @@ export default function AdminDesktop() {
   const [filterStartDate, setFilterStartDate] = useState('');
   const [filterEndDate, setFilterEndDate] = useState('');
 
+  const handleLogout = async () => {
+    if (confirm("Apakah Anda yakin ingin keluar dari dasbor admin?")) {
+      try {
+        await fetch('/api/admin/logout', { method: 'POST' });
+        window.location.href = '/';
+      } catch (err) {
+        alert('Gagal melakukan logout.');
+      }
+    }
+  };
+
   const refreshData = () => {
     setBookings(getBookings());
     setQueues(getQueue());
@@ -244,17 +255,27 @@ export default function AdminDesktop() {
             </p>
           </div>
           
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            border: '1px solid var(--surface-border)',
-            padding: '0.5rem 1rem',
-            borderRadius: '0.5rem',
-            backgroundColor: 'var(--surface)'
-          }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
-            <span style={{ fontWeight: 600, fontSize: '0.9rem', color: '#fff' }}>Desktop Admin Mode</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              border: '1px solid var(--surface-border)',
+              padding: '0.5rem 1rem',
+              borderRadius: '0.5rem',
+              backgroundColor: 'var(--surface)'
+            }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+              <span style={{ fontWeight: 600, fontSize: '0.9rem', color: '#fff' }}>Desktop Admin Mode</span>
+            </div>
+            <button 
+              onClick={handleLogout}
+              className="btn btn-secondary" 
+              style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.4rem', border: '1px solid var(--error)', color: 'var(--error)' }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              Logout
+            </button>
           </div>
         </div>
 

@@ -29,6 +29,17 @@ export default function AdminMobile() {
   const [filterStartDate, setFilterStartDate] = useState('');
   const [filterEndDate, setFilterEndDate] = useState('');
 
+  const handleLogout = async () => {
+    if (confirm("Apakah Anda yakin ingin keluar dari dasbor admin?")) {
+      try {
+        await fetch('/api/admin/logout', { method: 'POST' });
+        window.location.href = '/';
+      } catch (err) {
+        alert('Gagal melakukan logout.');
+      }
+    }
+  };
+
   const refreshData = () => {
     setBookings(getBookings());
     setQueues(getQueue());
@@ -180,12 +191,22 @@ export default function AdminMobile() {
       
       {/* Mobile Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h1 className="gold-gradient-text" style={{ fontSize: '1.5rem', fontWeight: 800 }}>
-          Dasbor Admin
-        </h1>
-        <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 600 }}>
-          Owner: Bang Arif
-        </span>
+        <div>
+          <h1 className="gold-gradient-text" style={{ fontSize: '1.5rem', fontWeight: 800 }}>
+            Dasbor Admin
+          </h1>
+          <span style={{ fontSize: '0.7rem', color: 'var(--foreground-muted)' }}>
+            Owner: Bang Arif
+          </span>
+        </div>
+        <button 
+          onClick={handleLogout}
+          className="btn btn-secondary" 
+          style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.25rem', border: '1px solid var(--error)', color: 'var(--error)' }}
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          Keluar
+        </button>
       </div>
 
       {/* Tabs Navigation */}

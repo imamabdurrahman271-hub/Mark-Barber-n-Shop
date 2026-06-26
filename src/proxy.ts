@@ -2,12 +2,22 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
   const userAgent = request.headers.get('user-agent') || '';
   
   // Simple but robust regex to detect mobile devices
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
   
-  // Copy headers and set our custom device type header
+  // 1. Cek Autentikasi Rute Admin
+  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
+    const sessionCookie = request.cookies.get('admin_session')?.value;
+    if (sessionCookie !== 'session_arif_active') {
+      const loginUrl = new URL('/admin/login', request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
+  // 2. Set header kustom tipe perangkat untuk downstream Server Components
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-device-type', isMobile ? 'mobile' : 'desktop');
   
