@@ -1,9 +1,23 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { supabase } from '@/lib/supabase';
+import { rateLimit } from '@/lib/rateLimit';
 
 export async function POST(request: Request) {
   try {
+    // Get client IP address
+    const ipHeader = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || '127.0.0.1';
+    const ip = ipHeader.split(',')[0].trim();
+
+    // Rate Limit: Maksimal 5 kali percobaan login dalam 5 menit (300.000 ms)
+    const limitResult = rateLimit(ip, 5, 300000);
+    if (!limitResult.success) {
+      return NextResponse.json(
+        { error: `Terlalu banyak percobaan login. Silakan coba lagi dalam ${limitResult.reset} detik.` },
+        { status: 429 }
+      );
+    }
+
     const { email, password } = await request.json();
     
     // Authenticate via Supabase Auth

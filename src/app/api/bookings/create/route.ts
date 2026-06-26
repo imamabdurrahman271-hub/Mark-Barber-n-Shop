@@ -1,9 +1,23 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { sendWhatsApp } from '@/lib/fonnte';
+import { rateLimit } from '@/lib/rateLimit';
 
 export async function POST(request: Request) {
   try {
+    // Get client IP address
+    const ipHeader = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || '127.0.0.1';
+    const ip = ipHeader.split(',')[0].trim();
+
+    // Rate Limit: Maksimal 3 kali pembuatan booking dalam 10 menit (600.000 ms)
+    const limitResult = rateLimit(ip, 3, 600000);
+    if (!limitResult.success) {
+      return NextResponse.json(
+        { error: `Terlalu banyak permintaan pembuatan booking. Silakan coba lagi dalam ${limitResult.reset} detik.` },
+        { status: 429 }
+      );
+    }
+
     const bookingData = await request.json();
     
     // 1. Dapatkan detail layanan untuk isi pesan WA
