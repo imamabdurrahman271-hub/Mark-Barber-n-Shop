@@ -524,3 +524,45 @@ export const deleteService = async (id: string): Promise<boolean> => {
   }
   return data.success;
 };
+
+// Tambahan Optimasi Server-Side API Bundling
+export interface BookingInitData {
+  services: Service[];
+  bookings: Booking[];
+  settings: ShopSettings;
+}
+
+export interface AdminInitData {
+  bookings: Booking[];
+  queues: QueueItem[];
+  services: Service[];
+  settings: ShopSettings;
+}
+
+export const getBookingInitData = async (): Promise<BookingInitData> => {
+  const response = await fetch('/api/bookings/init');
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Gagal mengambil data inisialisasi booking');
+  }
+  return {
+    services: data.services,
+    bookings: data.bookings,
+    settings: data.settings
+  };
+};
+
+export const getAdminInitData = async (): Promise<AdminInitData> => {
+  const response = await fetch('/api/admin/init');
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Gagal mengambil data inisialisasi dasbor admin');
+  }
+  return {
+    bookings: data.bookings,
+    queues: data.queue,
+    services: data.services,
+    settings: data.settings
+  };
+};
+

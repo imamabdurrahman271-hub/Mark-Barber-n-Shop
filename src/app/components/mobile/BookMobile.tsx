@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { getServices, createBooking, getBookings, getShopSettings, SOLO_STAFF, Booking, Service } from '@/lib/db';
+import { getBookingInitData, createBooking, SOLO_STAFF, Booking, Service } from '@/lib/db';
 
 export default function BookMobile() {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
@@ -33,18 +33,14 @@ export default function BookMobile() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      getServices(),
-      getBookings(),
-      getShopSettings()
-    ]).then(([fetchedServices, fetchedBookings, fetchedSettings]) => {
-      setServices(fetchedServices);
-      setExistingBookings(fetchedBookings);
-      setShopSettings(fetchedSettings);
+    getBookingInitData().then(({ services, bookings, settings }) => {
+      setServices(services);
+      setExistingBookings(bookings);
+      setShopSettings(settings);
       
       // Set default selected service ID to the first service if available
-      if (fetchedServices.length > 0) {
-        setSelectedServiceId(fetchedServices[0].id);
+      if (services.length > 0) {
+        setSelectedServiceId(services[0].id);
       }
       setIsLoading(false);
     }).catch(err => {

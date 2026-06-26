@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { 
-  getBookings, 
-  getQueue, 
+  getAdminInitData,
   updateBookingStatus, 
   updateQueueStatus, 
   addWalkInQueue,
@@ -11,14 +10,13 @@ import {
   subscribeToQueue, 
   Booking, 
   QueueItem,
-  getServices,
   createService,
   updateService,
   deleteService,
-  getShopSettings,
   updateShopSettings,
   Service,
-  ShopSettings
+  ShopSettings,
+  getBookings
 } from '@/lib/db';
 import ServicesManager from '@/app/components/admin/ServicesManager';
 import SettingsManager from '@/app/components/admin/SettingsManager';
@@ -64,18 +62,13 @@ export default function AdminMobile() {
 
   const refreshData = () => {
     setIsLoading(true);
-    Promise.all([
-      getBookings(),
-      getQueue(),
-      getServices(),
-      getShopSettings()
-    ]).then(([fetchedBookings, fetchedQueues, fetchedServices, fetchedSettings]) => {
-      setBookings(fetchedBookings);
-      setQueues(fetchedQueues);
-      setServices(fetchedServices);
-      setShopSettings(fetchedSettings);
-      if (fetchedServices.length > 0 && !walkInServiceId) {
-        setWalkInServiceId(fetchedServices[0].id);
+    getAdminInitData().then(({ bookings, queues, services, settings }) => {
+      setBookings(bookings);
+      setQueues(queues);
+      setServices(services);
+      setShopSettings(settings);
+      if (services.length > 0 && !walkInServiceId) {
+        setWalkInServiceId(services[0].id);
       }
       setIsLoading(false);
     }).catch(err => {
