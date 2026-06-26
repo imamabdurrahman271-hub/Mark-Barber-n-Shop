@@ -31,6 +31,20 @@
   font-family: var(--font-sans);
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-link {
+  color: var(--foreground-muted);
+}
+
+.nav-link:hover {
+  color: var(--primary);
+}
+
 html, body {
   max-width: 100vw;
   min-height: 100vh;
