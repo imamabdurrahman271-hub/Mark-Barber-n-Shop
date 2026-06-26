@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseServer as supabase } from '@/lib/supabaseServer';
 import { sendWhatsApp } from '@/lib/fonnte';
 import { rateLimit } from '@/lib/rateLimit';
 
