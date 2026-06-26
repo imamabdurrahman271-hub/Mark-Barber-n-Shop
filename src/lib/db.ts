@@ -208,79 +208,39 @@ export const getBookings = async (): Promise<Booking[]> => {
 };
 
 export const createBooking = async (bookingData: Omit<Booking, 'id' | 'status' | 'createdAt'>): Promise<Booking> => {
-  const newId = `book-${Math.random().toString(36).substr(2, 9)}`;
+  const response = await fetch('/api/bookings/create', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(bookingData)
+  });
   
-  const insertData = {
-    id: newId,
-    customer_name: bookingData.customerName,
-    customer_phone: bookingData.customerPhone,
-    service_id: bookingData.serviceId,
-    staff_id: bookingData.staffId,
-    booking_date: bookingData.bookingDate,
-    booking_time: bookingData.bookingTime,
-    status: 'pending',
-    payment_sender: bookingData.paymentSender,
-    payment_reference: bookingData.paymentReference
-  };
-  
-  const { data, error } = await supabase
-    .from('bookings')
-    .insert(insertData)
-    .select()
-    .single();
-    
-  if (error) {
-    console.error('Error creating booking:', error);
-    throw error;
+  const data = await response.json();
+  if (!response.ok) {
+    console.error('Error creating booking via API:', data.error);
+    throw new Error(data.error || 'Gagal membuat booking');
   }
   
-  return {
-    id: data.id,
-    customerName: data.customer_name,
-    customerPhone: data.customer_phone,
-    serviceId: data.service_id,
-    staffId: data.staff_id,
-    bookingDate: data.booking_date,
-    bookingTime: data.booking_time,
-    status: data.status,
-    paymentSender: data.payment_sender,
-    paymentReference: data.payment_reference,
-    createdAt: data.created_at
-  };
+  return data.booking;
 };
 
 export const updateBookingStatus = async (id: string, status: Booking['status']): Promise<Booking | null> => {
-  const { data, error } = await supabase
-    .from('bookings')
-    .update({ status })
-    .eq('id', id)
-    .select()
-    .single();
-    
-  if (error) {
-    console.error('Error updating booking status:', error);
+  const response = await fetch('/api/bookings/update-status', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id, status })
+  });
+  
+  const data = await response.json();
+  if (!response.ok) {
+    console.error('Error updating booking status via API:', data.error);
     return null;
   }
   
-  const updatedBooking: Booking = {
-    id: data.id,
-    customerName: data.customer_name,
-    customerPhone: data.customer_phone,
-    serviceId: data.service_id,
-    staffId: data.staff_id,
-    bookingDate: data.booking_date,
-    bookingTime: data.booking_time,
-    status: data.status,
-    paymentSender: data.payment_sender,
-    paymentReference: data.payment_reference,
-    createdAt: data.created_at
-  };
-  
-  if (status === 'confirmed') {
-    await addToQueue(updatedBooking);
-  }
-  
-  return updatedBooking;
+  return data.booking;
 };
 
 // Logika Antrian (Queues)
