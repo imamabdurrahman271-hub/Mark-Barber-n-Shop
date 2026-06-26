@@ -97,16 +97,6 @@ export default async function RootLayout({
                 }}></span>
                 Live Antrian
               </a>
-              <a href="/admin" style={{
-                fontWeight: 500,
-                fontSize: '0.85rem',
-                color: 'var(--foreground-muted)',
-                border: '1px solid var(--surface-border)',
-                padding: '0.35rem 0.75rem',
-                borderRadius: '0.375rem',
-                transition: 'all 0.2s'
-              }} className="nav-link-admin">Admin Dashboard</a>
-              
               <a href="/book" className="btn btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem' }}>
                 Book Now
               </a>
