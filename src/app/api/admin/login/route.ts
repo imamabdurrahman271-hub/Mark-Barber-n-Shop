@@ -16,6 +16,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Email atau Password salah' }, { status: 401 });
     }
 
+    // Pastikan email yang login adalah email admin yang terdaftar di env
+    const adminEmail = process.env.ADMIN_EMAIL;
+    if (data.user?.email !== adminEmail) {
+      await supabase.auth.signOut();
+      return NextResponse.json({ error: 'Email Anda tidak memiliki akses admin' }, { status: 403 });
+    }
+
     if (data.session) {
       const cookieStore = await cookies();
       cookieStore.set('admin_session', 'session_arif_active', {
