@@ -9,7 +9,7 @@ const tracker = new Map<string, RateLimitRecord>();
 if (typeof global !== 'undefined') {
   const globalRef = global as any;
   if (!globalRef.rateLimitInterval) {
-    globalRef.rateLimitInterval = setInterval(() => {
+    const interval = setInterval(() => {
       const now = Date.now();
       for (const [ip, record] of tracker.entries()) {
         // Keep only timestamps from the last 10 minutes
@@ -21,6 +21,12 @@ if (typeof global !== 'undefined') {
         }
       }
     }, 600000);
+    
+    // Unref the timer so it doesn't keep the Node.js event loop active during build or serverless shutdown
+    if (interval && typeof interval.unref === 'function') {
+      interval.unref();
+    }
+    globalRef.rateLimitInterval = interval;
   }
 }
 
