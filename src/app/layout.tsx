@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,11 +15,29 @@ export const metadata: Metadata = {
   }
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headerList = await headers();
+  const deviceType = headerList.get('x-device-type') || 'desktop';
+
+  if (deviceType === 'mobile') {
+    return (
+      <html lang="id">
+        <head>
+          <meta name="theme-color" content="#09090b" />
+        </head>
+        <body style={{ backgroundColor: 'var(--background)', color: 'var(--foreground)' }}>
+          <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+            {children}
+          </main>
+        </body>
+      </html>
+    );
+  }
+
   return (
     <html lang="id">
       <head>
