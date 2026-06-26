@@ -42,6 +42,13 @@ export interface QueueItem {
   durationMins: number;
 }
 
+export interface ShopSettings {
+  id: string;
+  operatingHours: string[];
+  closedDays: number[];
+  holidays: string[];
+}
+
 // 1. Data Statis Awal (Diambil langsung dari referensi Hairnerds Studio Bandung)
 export const SERVICES: Service[] = [
   {
@@ -440,4 +447,80 @@ export const subscribeToBookings = (callback: () => void) => {
   return () => {
     supabase.removeChannel(channel);
   };
+};
+
+// Pengaturan Toko (Shop Settings)
+export const getShopSettings = async (): Promise<ShopSettings> => {
+  const response = await fetch('/api/settings/get');
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Gagal mengambil pengaturan');
+  }
+  return data.settings;
+};
+
+export const updateShopSettings = async (settings: Omit<ShopSettings, 'id'>): Promise<ShopSettings> => {
+  const response = await fetch('/api/settings/update', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(settings)
+  });
+  
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Gagal memperbarui pengaturan');
+  }
+  return data.settings;
+};
+
+// Kelola Layanan (Service CRUD)
+export const createService = async (serviceData: Omit<Service, 'id'>): Promise<Service> => {
+  const response = await fetch('/api/services/create', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(serviceData)
+  });
+  
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Gagal membuat layanan');
+  }
+  return data.service;
+};
+
+export const updateService = async (id: string, serviceData: Partial<Omit<Service, 'id'>>): Promise<Service> => {
+  const response = await fetch('/api/services/update', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id, ...serviceData })
+  });
+  
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || 'Gagal memperbarui layanan');
+  }
+  return data.service;
+};
+
+export const deleteService = async (id: string): Promise<boolean> => {
+  const response = await fetch('/api/services/delete', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id })
+  });
+  
+  const data = await response.json();
+  if (!response.ok) {
+    console.error('Error deleting service:', data.error);
+    return false;
+  }
+  return data.success;
 };

@@ -11,15 +11,32 @@ import {
   subscribeToQueue, 
   Booking, 
   QueueItem,
-  SERVICES 
+  getServices,
+  createService,
+  updateService,
+  deleteService,
+  getShopSettings,
+  updateShopSettings,
+  Service,
+  ShopSettings
 } from '@/lib/db';
+import ServicesManager from '@/app/components/admin/ServicesManager';
+import SettingsManager from '@/app/components/admin/SettingsManager';
 
 export default function AdminDesktop() {
-  const [activeTab, setActiveTab] = useState<'bookings' | 'queue' | 'finance'>('bookings');
+  const [activeTab, setActiveTab] = useState<'bookings' | 'queue' | 'finance' | 'services' | 'settings'>('bookings');
   
   // Data State
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [queues, setQueues] = useState<QueueItem[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [shopSettings, setShopSettings] = useState<ShopSettings>({
+    id: 'default',
+    operatingHours: ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"],
+    closedDays: [0, 6],
+    holidays: []
+  });
+  const [isLoading, setIsLoading] = useState(true);
   
   // Walk-in form state
   const [walkInName, setWalkInName] = useState('');
@@ -41,13 +58,32 @@ export default function AdminDesktop() {
   };
 
   const refreshData = () => {
-    getBookings().then(setBookings);
-    getQueue().then(setQueues);
+    setIsLoading(true);
+    Promise.all([
+      getBookings(),
+      getQueue(),
+      getServices(),
+      getShopSettings()
+    ]).then(([fetchedBookings, fetchedQueues, fetchedServices, fetchedSettings]) => {
+      setBookings(fetchedBookings);
+      setQueues(fetchedQueues);
+      setServices(fetchedServices);
+      setShopSettings(fetchedSettings);
+      if (fetchedServices.length > 0 && !walkInServiceId) {
+        setWalkInServiceId(fetchedServices[0].id);
+      }
+      setIsLoading(false);
+    }).catch(err => {
+      console.error('Error refreshing admin data:', err);
+      setIsLoading(false);
+    });
   };
 
   useEffect(() => {
     refreshData();
-    const unsubscribeBookings = subscribeToBookings(refreshData);
+    const unsubscribeBookings = subscribeToBookings(() => {
+      getBookings().then(setBookings);
+    });
     const unsubscribeQueue = subscribeToQueue(refreshData);
     
     // Set default filter to last 7 days
@@ -74,13 +110,13 @@ export default function AdminDesktop() {
   });
 
   const totalRevenue = completedBookings.reduce((sum, b) => {
-    const service = SERVICES.find(s => s.id === b.serviceId);
+    const service = services.find(s => s.id === b.serviceId);
     return sum + (service ? service.price : 0);
   }, 0);
 
   const avgTicketSize = completedBookings.length > 0 ? totalRevenue / completedBookings.length : 0;
 
-  const serviceStats = SERVICES.map(s => {
+  const serviceStats = services.map(s => {
     const count = completedBookings.filter(b => b.serviceId === s.id).length;
     return {
       title: s.title,
@@ -101,7 +137,7 @@ export default function AdminDesktop() {
     
     completedBookings.forEach(b => {
       if (dailyMap[b.bookingDate] !== undefined) {
-        const s = SERVICES.find(serv => serv.id === b.serviceId);
+        const s = services.find(serv => serv.id === b.serviceId);
         dailyMap[b.bookingDate] += s ? s.price : 0;
       }
     });
@@ -166,7 +202,7 @@ export default function AdminDesktop() {
     csvContent += "ID Transaksi,Tanggal,Pelanggan,WhatsApp,Layanan,Harga,Metode Pembayaran,Referensi\n";
     
     completedBookings.forEach(b => {
-      const service = SERVICES.find(s => s.id === b.serviceId);
+      const service = services.find(s => s.id === b.serviceId);
       const price = service ? service.price : 0;
       const title = service ? service.title.replace(/,/g, ' ') : '';
       const name = b.customerName.replace(/,/g, ' ');
@@ -230,7 +266,7 @@ export default function AdminDesktop() {
           </thead>
           <tbody>
             {completedBookings.map((b) => {
-              const service = SERVICES.find(s => s.id === b.serviceId);
+              const service = services.find(s => s.id === b.serviceId);
               return (
                 <tr key={b.id}>
                   <td>{b.id}</td>
@@ -312,6 +348,20 @@ export default function AdminDesktop() {
           >
             Laporan Keuangan
           </button>
+          <button 
+            onClick={() => setActiveTab('services')}
+            className={`btn ${activeTab === 'services' ? 'btn-primary' : 'btn-secondary'}`}
+            style={{ padding: '0.65rem 1.5rem', fontSize: '0.9rem' }}
+          >
+            Kelola Layanan
+          </button>
+          <button 
+            onClick={() => setActiveTab('settings')}
+            className={`btn ${activeTab === 'settings' ? 'btn-primary' : 'btn-secondary'}`}
+            style={{ padding: '0.65rem 1.5rem', fontSize: '0.9rem' }}
+          >
+            Pengaturan Toko
+          </button>
         </div>
 
         {/* TAB 1: PERSETUJUAN BOOKING */}
@@ -332,7 +382,7 @@ export default function AdminDesktop() {
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 {pendingBookings.map((b) => {
-                  const service = SERVICES.find(s => s.id === b.serviceId);
+                  const service = services.find(s => s.id === b.serviceId);
                   const cleanPhone = b.customerPhone.replace(/^0/, '62');
                   const waUrl = `https://wa.me/${cleanPhone}?text=Halo%20${encodeURIComponent(b.customerName)},%20booking%20barbershop%20Anda%20pada%20tanggal%20${b.bookingDate}%20jam%20${b.bookingTime}%20WIB%20telah%20kami%20verifikasi.%20Silakan%20datang%20tepat%20waktu!`;
 
@@ -512,7 +562,7 @@ export default function AdminDesktop() {
                     <label htmlFor="walkInService" style={{ display: 'block', fontSize: '0.85rem', color: 'var(--foreground-muted)', marginBottom: '0.5rem', fontWeight: 600 }}>Layanan Cukur *</label>
                     <select id="walkInService" value={walkInServiceId} onChange={(e) => setWalkInServiceId(e.target.value)} required style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '0.375rem', backgroundColor: 'var(--surface-hover)', border: '1px solid var(--surface-border)', color: '#fff', fontSize: '0.95rem', outline: 'none' }}>
                       <option value="" disabled>-- Pilih Layanan --</option>
-                      {SERVICES.map(s => (
+                      {services.map(s => (
                         <option key={s.id} value={s.id}>{s.title} (Rp {s.price.toLocaleString('id-ID')})</option>
                       ))}
                     </select>
@@ -654,7 +704,7 @@ export default function AdminDesktop() {
                   </thead>
                   <tbody>
                     {completedBookings.map((b) => {
-                      const service = SERVICES.find(s => s.id === b.serviceId);
+                      const service = services.find(s => s.id === b.serviceId);
                       return (
                         <tr key={b.id} style={{ borderBottom: '1px solid var(--surface-border)' }} className="table-row-hover">
                           <td style={{ padding: '1rem', color: 'var(--primary)', fontWeight: 600 }}>{b.id}</td>
@@ -673,6 +723,20 @@ export default function AdminDesktop() {
               </div>
             </div>
 
+          </div>
+        )}
+
+        {/* TAB 4: KELOLA LAYANAN */}
+        {activeTab === 'services' && (
+          <div className="animate-slide-up">
+            <ServicesManager services={services} onRefresh={refreshData} />
+          </div>
+        )}
+
+        {/* TAB 5: PENGATURAN TOKO */}
+        {activeTab === 'settings' && (
+          <div className="animate-slide-up">
+            <SettingsManager settings={shopSettings} onRefresh={refreshData} />
           </div>
         )}
 

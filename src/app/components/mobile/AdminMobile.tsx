@@ -11,15 +11,32 @@ import {
   subscribeToQueue, 
   Booking, 
   QueueItem,
-  SERVICES 
+  getServices,
+  createService,
+  updateService,
+  deleteService,
+  getShopSettings,
+  updateShopSettings,
+  Service,
+  ShopSettings
 } from '@/lib/db';
+import ServicesManager from '@/app/components/admin/ServicesManager';
+import SettingsManager from '@/app/components/admin/SettingsManager';
 
 export default function AdminMobile() {
-  const [activeTab, setActiveTab] = useState<'bookings' | 'queue' | 'finance'>('bookings');
+  const [activeTab, setActiveTab] = useState<'bookings' | 'queue' | 'finance' | 'services' | 'settings'>('bookings');
   
   // Data State
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [queues, setQueues] = useState<QueueItem[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [shopSettings, setShopSettings] = useState<ShopSettings>({
+    id: 'default',
+    operatingHours: ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"],
+    closedDays: [0, 6],
+    holidays: []
+  });
+  const [isLoading, setIsLoading] = useState(true);
   
   // Walk-in form state
   const [walkInName, setWalkInName] = useState('');
@@ -41,13 +58,32 @@ export default function AdminMobile() {
   };
 
   const refreshData = () => {
-    getBookings().then(setBookings);
-    getQueue().then(setQueues);
+    setIsLoading(true);
+    Promise.all([
+      getBookings(),
+      getQueue(),
+      getServices(),
+      getShopSettings()
+    ]).then(([fetchedBookings, fetchedQueues, fetchedServices, fetchedSettings]) => {
+      setBookings(fetchedBookings);
+      setQueues(fetchedQueues);
+      setServices(fetchedServices);
+      setShopSettings(fetchedSettings);
+      if (fetchedServices.length > 0 && !walkInServiceId) {
+        setWalkInServiceId(fetchedServices[0].id);
+      }
+      setIsLoading(false);
+    }).catch(err => {
+      console.error('Error refreshing admin data:', err);
+      setIsLoading(false);
+    });
   };
 
   useEffect(() => {
     refreshData();
-    const unsubscribeBookings = subscribeToBookings(refreshData);
+    const unsubscribeBookings = subscribeToBookings(() => {
+      getBookings().then(setBookings);
+    });
     const unsubscribeQueue = subscribeToQueue(refreshData);
     
     const today = new Date();
@@ -73,13 +109,13 @@ export default function AdminMobile() {
   });
 
   const totalRevenue = completedBookings.reduce((sum, b) => {
-    const service = SERVICES.find(s => s.id === b.serviceId);
+    const service = services.find(s => s.id === b.serviceId);
     return sum + (service ? service.price : 0);
   }, 0);
 
   const avgTicketSize = completedBookings.length > 0 ? totalRevenue / completedBookings.length : 0;
 
-  const serviceStats = SERVICES.map(s => {
+  const serviceStats = services.map(s => {
     const count = completedBookings.filter(b => b.serviceId === s.id).length;
     return {
       title: s.title,
@@ -100,7 +136,7 @@ export default function AdminMobile() {
     
     completedBookings.forEach(b => {
       if (dailyMap[b.bookingDate] !== undefined) {
-        const s = SERVICES.find(serv => serv.id === b.serviceId);
+        const s = services.find(serv => serv.id === b.serviceId);
         dailyMap[b.bookingDate] += s ? s.price : 0;
       }
     });
@@ -165,7 +201,7 @@ export default function AdminMobile() {
     csvContent += "ID Transaksi,Tanggal,Pelanggan,WhatsApp,Layanan,Harga,Metode Pembayaran,Referensi\n";
     
     completedBookings.forEach(b => {
-      const service = SERVICES.find(s => s.id === b.serviceId);
+      const service = services.find(s => s.id === b.serviceId);
       const price = service ? service.price : 0;
       const title = service ? service.title.replace(/,/g, ' ') : '';
       const name = b.customerName.replace(/,/g, ' ');
@@ -219,19 +255,32 @@ export default function AdminMobile() {
         borderRadius: '0.5rem',
         padding: '0.25rem',
         marginBottom: '1.5rem',
-        border: '1px solid var(--surface-border)'
+        border: '1px solid var(--surface-border)',
+        overflowX: 'auto',
+        whiteSpace: 'nowrap',
+        gap: '0.25rem',
+        scrollbarWidth: 'none', // Hide scrollbar in Firefox
+        msOverflowStyle: 'none'  // Hide scrollbar in IE/Edge
       }}>
+        {/* Style tag to hide scrollbars for Chrome/Safari */}
+        <style dangerouslySetInnerHTML={{__html: `
+          div::-webkit-scrollbar {
+            display: none;
+          }
+        `}} />
         {[
           { id: 'bookings', label: `Booking (${pendingBookings.length})` },
           { id: 'queue', label: `Antrian (${activeQueues.length})` },
-          { id: 'finance', label: 'Keuangan' }
+          { id: 'finance', label: 'Keuangan' },
+          { id: 'services', label: 'Layanan' },
+          { id: 'settings', label: 'Pengaturan' }
         ].map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
             style={{
-              flex: 1,
-              padding: '0.6rem 0',
+              flexShrink: 0,
+              padding: '0.6rem 1.25rem',
               fontSize: '0.8rem',
               fontWeight: 700,
               borderRadius: '0.375rem',
@@ -262,7 +311,7 @@ export default function AdminMobile() {
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {pendingBookings.map((b) => {
-                const service = SERVICES.find(s => s.id === b.serviceId);
+                const service = services.find(s => s.id === b.serviceId);
                 const cleanPhone = b.customerPhone.replace(/^0/, '62');
                 const waUrl = `https://wa.me/${cleanPhone}?text=Halo%20${encodeURIComponent(b.customerName)},%20booking%20barbershop%20Anda%20pada%20tanggal%20${b.bookingDate}%20jam%20${b.bookingTime}%20WIB%20telah%20kami%20verifikasi.%20Silakan%20datang%20tepat%20waktu!`;
 
@@ -391,7 +440,7 @@ export default function AdminMobile() {
                   <label htmlFor="walkInService" style={{ display: 'block', fontSize: '0.75rem', color: 'var(--foreground-muted)', marginBottom: '0.25rem' }}>Layanan Cukur *</label>
                   <select id="walkInService" value={walkInServiceId} onChange={(e) => setWalkInServiceId(e.target.value)} required style={{ width: '100%', padding: '0.6rem 0.85rem', borderRadius: '0.25rem', backgroundColor: 'var(--surface-hover)', border: '1px solid var(--surface-border)', color: '#fff', fontSize: '0.85rem', outline: 'none' }}>
                     <option value="" disabled>-- Pilih Layanan --</option>
-                    {SERVICES.map(s => (
+                    {services.map(s => (
                       <option key={s.id} value={s.id}>{s.title} (Rp {s.price.toLocaleString('id-ID')})</option>
                     ))}
                   </select>
@@ -495,7 +544,7 @@ export default function AdminMobile() {
             <h4 style={{ color: '#fff', fontSize: '0.9rem', fontWeight: 700, marginBottom: '1rem' }}>Riwayat Transaksi</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {completedBookings.map((b) => {
-                const service = SERVICES.find(s => s.id === b.serviceId);
+                const service = services.find(s => s.id === b.serviceId);
                 return (
                   <div key={b.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '0.5rem', borderBottom: '1px solid var(--surface-border)', fontSize: '0.8rem' }}>
                     <div>
@@ -511,7 +560,20 @@ export default function AdminMobile() {
               })}
             </div>
           </div>
+        </div>
+      )}
 
+      {/* TAB 4: LAYANAN */}
+      {activeTab === 'services' && (
+        <div className="animate-slide-up">
+          <ServicesManager services={services} onRefresh={refreshData} />
+        </div>
+      )}
+
+      {/* TAB 5: PENGATURAN */}
+      {activeTab === 'settings' && (
+        <div className="animate-slide-up">
+          <SettingsManager settings={shopSettings} onRefresh={refreshData} />
         </div>
       )}
 

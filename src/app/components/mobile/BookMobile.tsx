@@ -1,36 +1,54 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { getServices, createBooking, getBookings, SERVICES, SOLO_STAFF, Booking } from '@/lib/db';
+import { getServices, createBooking, getBookings, getShopSettings, SOLO_STAFF, Booking, Service } from '@/lib/db';
 
 export default function BookMobile() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  const [selectedServiceId, setSelectedServiceId] = useState<string>('1');
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedTime, setSelectedTime] = useState<string>('');
   
-  // Form State
-  const [selectedServiceId, setSelectedServiceId] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedTime, setSelectedTime] = useState('');
-  const [customerName, setCustomerName] = useState('');
-  const [customerPhone, setCustomerPhone] = useState('');
-  const [paymentSender, setPaymentSender] = useState('');
-  const [paymentReference, setPaymentReference] = useState('');
-  const [notes, setNotes] = useState('');
+  // Form Inputs
+  const [customerName, setCustomerName] = useState<string>('');
+  const [customerPhone, setCustomerPhone] = useState<string>('');
+  const [paymentSender, setPaymentSender] = useState<string>('');
+  const [paymentReference, setPaymentReference] = useState<string>('');
+  const [notes, setNotes] = useState<string>('');
   
-  // Calculated state
+  // Database states
+  const [services, setServices] = useState<Service[]>([]);
   const [existingBookings, setExistingBookings] = useState<Booking[]>([]);
   const [createdBooking, setCreatedBooking] = useState<Booking | null>(null);
+  const [shopSettings, setShopSettings] = useState<{ operatingHours: string[], closedDays: number[], holidays: string[] }>({
+    operatingHours: ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"],
+    closedDays: [0, 6],
+    holidays: []
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getBookings().then(setExistingBookings);
+    Promise.all([
+      getServices(),
+      getBookings(),
+      getShopSettings()
+    ]).then(([fetchedServices, fetchedBookings, fetchedSettings]) => {
+      setServices(fetchedServices);
+      setExistingBookings(fetchedBookings);
+      setShopSettings(fetchedSettings);
+      
+      // Set default selected service ID to the first service if available
+      if (fetchedServices.length > 0) {
+        setSelectedServiceId(fetchedServices[0].id);
+      }
+      setIsLoading(false);
+    }).catch(err => {
+      console.error('Error loading booking data:', err);
+      setIsLoading(false);
+    });
   }, []);
 
-  const selectedService = SERVICES.find(s => s.id === selectedServiceId);
-
-  // Jam operasional harian: 08:00 - 17:00 (Setiap 1 jam sesuai durasi rata-rata 60 menit)
-  const timeSlots = [
-    "08:00", "09:00", "10:00", "11:00", "12:00", 
-    "13:00", "14:00", "15:00", "16:00"
-  ];
+  const selectedService = services.find(s => s.id === selectedServiceId);
 
   const getMinDate = () => {
     const today = new Date();
@@ -46,16 +64,29 @@ export default function BookMobile() {
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = e.target.value;
+    if (!date) return;
+    
     const day = new Date(date).getDay();
     
-    if (day === 0 || day === 6) {
-      alert("Maaf, Mark Barber n Shop tutup pada hari Sabtu dan Minggu. Silakan pilih hari Senin s/d Jumat.");
+    // 1. Cek Hari Libur Rutin (closedDays)
+    if (shopSettings.closedDays.includes(day)) {
+      const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+      alert(`Maaf, Mark Barber n Shop libur pada hari ${dayNames[day]}. Silakan pilih hari lain.`);
       setSelectedDate('');
       setSelectedTime('');
-    } else {
-      setSelectedDate(date);
-      setSelectedTime(''); // Reset pilihan waktu saat tanggal diubah
+      return;
     }
+    
+    // 2. Cek Tanggal Cuti/Libur Khusus (holidays)
+    if (shopSettings.holidays.includes(date)) {
+      alert("Maaf, Mark Barber n Shop sedang tutup/libur pada tanggal tersebut. Silakan pilih tanggal lain.");
+      setSelectedDate('');
+      setSelectedTime('');
+      return;
+    }
+    
+    setSelectedDate(date);
+    setSelectedTime(''); // Reset pilihan waktu saat tanggal diubah
   };
 
   const isTimeSlotBooked = (time: string) => {
@@ -111,6 +142,35 @@ export default function BookMobile() {
       alert("Gagal membuat reservasi. Silakan coba kembali.");
     }
   };
+
+  if (isLoading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column',
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '80vh',
+        color: 'var(--foreground-muted)'
+      }}>
+        <style>{`
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
+        <div style={{
+          width: '40px',
+          height: '40px',
+          border: '3px solid var(--surface-border)',
+          borderTop: '3px solid var(--primary)',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite',
+          marginBottom: '1rem'
+        }}></div>
+        <span style={{ fontSize: '0.9rem' }}>Memuat data layanan & jadwal...</span>
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: '2rem 1rem 7rem 1rem', minHeight: '90vh' }} className="animate-fade-in">
@@ -195,7 +255,7 @@ export default function BookMobile() {
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            {SERVICES.map((s) => (
+            {services.map((s) => (
               <div 
                 key={s.id} 
                 onClick={() => handleServiceSelect(s.id)}
@@ -305,7 +365,7 @@ export default function BookMobile() {
                   gridTemplateColumns: 'repeat(3, 1fr)',
                   gap: '0.5rem'
                 }}>
-                  {timeSlots.map((time) => {
+                  {shopSettings.operatingHours.map((time) => {
                     const booked = isTimeSlotBooked(time);
                     const isSelected = selectedTime === time;
                     return (
