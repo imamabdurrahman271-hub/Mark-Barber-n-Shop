@@ -53,107 +53,27 @@ export interface ShopSettings {
 export const SERVICES: Service[] = [
   {
     id: '1',
-    title: "Men's Reguler Haircut",
-    price: 120000,
-    durationMins: 60,
-    description: "Hairwash, Haircut & Premium Hairstyling",
+    title: "Pangkas Rambut Dewasa",
+    price: 25000,
+    durationMins: 30,
+    description: "Potong rambut dewasa rapi dan nyaman",
     category: 'Haircut'
   },
   {
     id: '2',
-    title: "Haircut + Hot Towel Shaving",
-    price: 150000,
-    durationMins: 60,
-    description: "Layanan lengkap: Hairwash, Haircut, Hairstyling, & Premium Shaving",
+    title: "Pangkas Rambut Remaja",
+    price: 20000,
+    durationMins: 30,
+    description: "Potong rambut remaja gaya kekinian",
     category: 'Haircut'
   },
   {
     id: '3',
-    title: "Hot Towel Shaving",
-    price: 85000,
-    durationMins: 60,
-    description: "Cukur jenggot/kumis premium dengan handuk hangat dan pijatan wajah",
-    category: 'Shaving'
-  },
-  {
-    id: '4',
-    title: "Perm Hair (Pengeritingan)",
-    price: 500000,
-    durationMins: 180,
-    description: "Pengeritingan rambut modern untuk tampilan bertekstur dan bervolume",
-    category: 'Other'
-  },
-  {
-    id: '5',
-    title: "Men's Haircolour Fashion",
-    price: 700000,
-    durationMins: 120,
-    description: "Pewarnaan fashion premium (Grey, Purple, Pink, dll.) *Harga mulai dari 700rb",
-    category: 'Colouring'
-  },
-  {
-    id: '6',
-    title: "Men's Basic Colour",
-    price: 400000,
-    durationMins: 60,
-    description: "Pewarnaan dasar natural (Brown & Black) *Harga mulai dari 400rb",
-    category: 'Colouring'
-  },
-  {
-    id: '7',
-    title: "Men Darken Colour",
-    price: 250000,
-    durationMins: 120,
-    description: "Pewarnaan untuk menutupi uban secara alami",
-    category: 'Colouring'
-  },
-  {
-    id: '8',
-    title: "Men's Highlight",
-    price: 600000,
-    durationMins: 120,
-    description: "Pewarnaan highlight parsial untuk dimensi rambut *Harga mulai dari 600rb",
-    category: 'Colouring'
-  },
-  {
-    id: '9',
-    title: "Styling & Hairwash",
-    price: 85000,
+    title: "Pangkas Rambut Anak",
+    price: 15000,
     durationMins: 30,
-    description: "Cuci rambut premium, styling menggunakan produk rambut berkualitas (pomade/clay)",
-    category: 'Styling'
-  },
-  {
-    id: '10',
-    title: "Dreadlock (Rambut Gimbal)",
-    price: 1500000,
-    durationMins: 360,
-    description: "Pembuatan rambut gimbal premium berdurasi panjang",
-    category: 'Other'
-  },
-  {
-    id: '11',
-    title: "Cornrow",
-    price: 300000,
-    durationMins: 180,
-    description: "Kepang rambut gaya Cornrow rapi",
-    category: 'Other'
-  },
-  {
-    id: '12',
-    title: "Braid Box",
-    price: 450000,
-    durationMins: 180,
-    description: "Kepang rambut gaya Braid Box kreatif",
-    category: 'Other'
-  },
-  {
-    id: '13',
-    title: "Hair Design / Hair Tattoo",
-    price: 250000,
-    durationMins: 120,
-    description: "Seni ukir pola/tato pada rambut kepala",
-    category: 'Styling'
+    description: "Potong rambut anak-anak rapi dan ramah anak",
+    category: 'Haircut'
   }
 ];
 
