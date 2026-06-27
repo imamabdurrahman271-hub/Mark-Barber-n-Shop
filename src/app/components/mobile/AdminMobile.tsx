@@ -468,6 +468,108 @@ export default function AdminMobile() {
                 <input type="date" value={filterEndDate} onChange={(e) => setFilterEndDate(e.target.value)} style={{ width: '100%', padding: '0.4rem', borderRadius: '0.25rem', backgroundColor: 'var(--surface-hover)', border: '1px solid var(--surface-border)', color: '#fff', fontSize: '0.8rem' }} />
               </div>
             </div>
+            <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap' }}>
+              <button 
+                onClick={() => {
+                  const today = new Date();
+                  const yyyy = today.getFullYear();
+                  const mm = String(today.getMonth() + 1).padStart(2, '0');
+                  const dd = String(today.getDate()).padStart(2, '0');
+                  const dateStr = `${yyyy}-${mm}-${dd}`;
+                  setFilterStartDate(dateStr);
+                  setFilterEndDate(dateStr);
+                }}
+                type="button"
+                style={{
+                  flex: 1,
+                  padding: '0.4rem 0',
+                  borderRadius: '0.25rem',
+                  backgroundColor: 'var(--surface-hover)',
+                  border: '1px solid var(--surface-border)',
+                  color: '#fff',
+                  fontSize: '0.75rem',
+                  cursor: 'pointer'
+                }}
+              >
+                Hari Ini
+              </button>
+              <button 
+                onClick={() => {
+                  const today = new Date();
+                  const firstDayOfWeek = new Date(today);
+                  const day = today.getDay();
+                  const diff = today.getDate() - day + (day === 0 ? -6 : 1);
+                  firstDayOfWeek.setDate(diff);
+                  const formatDate = (d: Date) => {
+                    const yyyy = d.getFullYear();
+                    const mm = String(d.getMonth() + 1).padStart(2, '0');
+                    const dd = String(d.getDate()).padStart(2, '0');
+                    return `${yyyy}-${mm}-${dd}`;
+                  };
+                  setFilterStartDate(formatDate(firstDayOfWeek));
+                  setFilterEndDate(formatDate(today));
+                }}
+                type="button"
+                style={{
+                  flex: 1,
+                  padding: '0.4rem 0',
+                  borderRadius: '0.25rem',
+                  backgroundColor: 'var(--surface-hover)',
+                  border: '1px solid var(--surface-border)',
+                  color: '#fff',
+                  fontSize: '0.75rem',
+                  cursor: 'pointer'
+                }}
+              >
+                Minggu Ini
+              </button>
+              <button 
+                onClick={() => {
+                  const today = new Date();
+                  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+                  const formatDate = (d: Date) => {
+                    const yyyy = d.getFullYear();
+                    const mm = String(d.getMonth() + 1).padStart(2, '0');
+                    const dd = String(d.getDate()).padStart(2, '0');
+                    return `${yyyy}-${mm}-${dd}`;
+                  };
+                  setFilterStartDate(formatDate(firstDayOfMonth));
+                  setFilterEndDate(formatDate(today));
+                }}
+                type="button"
+                style={{
+                  flex: 1,
+                  padding: '0.4rem 0',
+                  borderRadius: '0.25rem',
+                  backgroundColor: 'var(--surface-hover)',
+                  border: '1px solid var(--surface-border)',
+                  color: '#fff',
+                  fontSize: '0.75rem',
+                  cursor: 'pointer'
+                }}
+              >
+                Bulan Ini
+              </button>
+              <button 
+                onClick={() => {
+                  setFilterStartDate('');
+                  setFilterEndDate('');
+                }}
+                type="button"
+                style={{
+                  flex: 1,
+                  padding: '0.4rem 0',
+                  borderRadius: '0.25rem',
+                  backgroundColor: 'var(--surface-hover)',
+                  border: '1px solid var(--surface-border)',
+                  color: '#fff',
+                  fontSize: '0.75rem',
+                  cursor: 'pointer'
+                }}
+              >
+                Semua
+              </button>
+            </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
               <button onClick={handleExportExcel} className="btn btn-secondary" style={{ padding: '0.5rem', fontSize: '0.75rem' }}>
                 Ekspor Excel
