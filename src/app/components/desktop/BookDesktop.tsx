@@ -847,7 +847,7 @@ export default function BookDesktop() {
                   );
                 })}
               </svg>
-              <span style={{ fontSize: '0.75rem', color: 'var(--foreground-muted)', letterSpacing: '3px' }}>* MARK-BARBER-N-SHOP *</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--foreground-muted)', letterSpacing: '3px' }}>* MARK BARBER N SHOP *</span>
             </div>
           </div>
 
