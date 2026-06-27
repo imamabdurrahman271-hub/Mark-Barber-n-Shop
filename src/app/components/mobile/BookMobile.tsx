@@ -593,7 +593,7 @@ export default function BookMobile() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', fontSize: '0.8rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px dashed rgba(235, 220, 185, 0.1)', paddingBottom: '0.5rem' }}>
                 <span style={{ color: '#a49e8f' }}>QRIS Mark Barber</span>
-                <strong style={{ color: '#ebdcb9' }}>[ Scan di Kasir ]</strong>
+                <strong style={{ color: '#ebdcb9' }}>[ Scan di Bawah ]</strong>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px dashed rgba(235, 220, 185, 0.1)', paddingBottom: '0.5rem' }}>
                 <span style={{ color: '#a49e8f' }}>BCA (Arif)</span>
@@ -607,6 +607,23 @@ export default function BookMobile() {
                 <span style={{ color: '#a49e8f' }}>DANA (Arif)</span>
                 <strong style={{ color: '#fff', letterSpacing: '0.5px' }}>0811-2160-042</strong>
               </div>
+            </div>
+
+            {/* QRIS Image */}
+            <div style={{ marginTop: '1.25rem', textAlign: 'center', backgroundColor: '#050505', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid rgba(235, 220, 185, 0.1)' }}>
+              <img 
+                src="/qris.png" 
+                alt="QRIS Mark Barber" 
+                style={{ maxWidth: '180px', height: 'auto', borderRadius: '0.25rem', display: 'block', margin: '0 auto' }}
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  const parent = e.currentTarget.parentElement;
+                  if (parent) {
+                    parent.style.display = 'none';
+                  }
+                }}
+              />
+              <span style={{ fontSize: '0.7rem', color: '#a49e8f', display: 'block', marginTop: '0.35rem' }}>Scan QRIS Resmi</span>
             </div>
           </div>
 

@@ -739,6 +739,23 @@ export default function BookDesktop() {
                         <div>GOPAY/OVO: <strong style={{ color: '#fff' }}>0811-2160-042</strong></div>
                         <div>DANA: <strong style={{ color: '#fff' }}>0811-2160-042</strong></div>
                       </div>
+                      
+                      {/* QRIS Image */}
+                      <div style={{ marginTop: '1rem', textAlign: 'center', backgroundColor: '#000', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid var(--surface-border)' }} className="qris-container">
+                        <img 
+                          src="/qris.png" 
+                          alt="QRIS Mark Barber" 
+                          style={{ maxWidth: '100%', height: 'auto', borderRadius: '0.25rem', display: 'block', margin: '0 auto' }}
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            const parent = e.currentTarget.parentElement;
+                            if (parent) {
+                              parent.style.display = 'none';
+                            }
+                          }}
+                        />
+                        <span style={{ fontSize: '0.7rem', color: 'var(--foreground-muted)', display: 'block', marginTop: '0.35rem' }}>Scan QRIS Resmi</span>
+                      </div>
                     </div>
                   )}
 
