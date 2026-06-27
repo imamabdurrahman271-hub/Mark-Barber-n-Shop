@@ -33,10 +33,19 @@ export async function POST(request: Request) {
     // 2. Buat ID booking unik
     const newId = `book-${Math.random().toString(36).substr(2, 9)}`;
     
+    // Sanitasi nomor WhatsApp pelanggan agar berformat internasional (628...)
+    const rawPhone = bookingData.customerPhone || '';
+    let formattedPhone = rawPhone.replace(/[^0-9]/g, '');
+    if (formattedPhone.startsWith('0')) {
+      formattedPhone = '62' + formattedPhone.slice(1);
+    } else if (formattedPhone.startsWith('8')) {
+      formattedPhone = '62' + formattedPhone;
+    }
+
     const insertData = {
       id: newId,
       customer_name: bookingData.customerName,
-      customer_phone: bookingData.customerPhone,
+      customer_phone: formattedPhone,
       service_id: bookingData.serviceId,
       staff_id: bookingData.staffId,
       booking_date: bookingData.bookingDate,
