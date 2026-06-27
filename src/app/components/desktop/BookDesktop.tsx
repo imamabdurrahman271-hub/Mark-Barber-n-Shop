@@ -12,8 +12,8 @@ export default function BookDesktop() {
   // Form State
   const [customerName, setCustomerName] = useState<string>('');
   const [customerPhone, setCustomerPhone] = useState<string>('');
-  const [paymentSender, setPaymentSender] = useState<string>('');
-  const [paymentReference, setPaymentReference] = useState<string>('');
+  const [paymentSender, setPaymentSender] = useState<string>('Tunai / Transfer');
+  const [paymentReference, setPaymentReference] = useState<string>('Manual');
   const [notes, setNotes] = useState<string>('');
   
   // Database states
@@ -469,9 +469,9 @@ export default function BookDesktop() {
                   Kembali ke Pilih Jadwal
                 </button>
 
-                <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.5rem', color: '#fff' }}>Form Pembayaran & Data Kontak</h2>
+                 <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.5rem', color: '#fff' }}>Form Data Kontak & Booking</h2>
                 <p style={{ color: 'var(--foreground-muted)', marginBottom: '2rem', fontSize: '0.95rem' }}>
-                  Mohon isi detail kontak dan bukti transaksi pembayaran manual Anda di bawah ini.
+                  Mohon isi detail kontak Anda di bawah ini untuk menyelesaikan booking.
                 </p>
 
                 <form onSubmit={handleSubmitBooking}>
@@ -513,58 +513,6 @@ export default function BookDesktop() {
                         value={customerPhone}
                         onChange={(e) => setCustomerPhone(e.target.value)}
                         placeholder="Contoh: 08123456789"
-                        required
-                        style={{
-                          width: '100%',
-                          padding: '0.85rem 1rem',
-                          borderRadius: '0.375rem',
-                          backgroundColor: 'var(--surface)',
-                          border: '1px solid var(--surface-border)',
-                          color: '#fff',
-                          fontSize: '0.95rem',
-                          outline: 'none'
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
-                    {/* Sender Account */}
-                    <div>
-                      <label htmlFor="senderAcc" style={{ display: 'block', fontSize: '0.85rem', color: 'var(--foreground-muted)', marginBottom: '0.5rem', fontWeight: 600 }}>
-                        Nama Pengirim Transfer *
-                      </label>
-                      <input 
-                        type="text"
-                        id="senderAcc"
-                        value={paymentSender}
-                        onChange={(e) => setPaymentSender(e.target.value)}
-                        placeholder="Contoh: Budi Susanto (BCA)"
-                        required
-                        style={{
-                          width: '100%',
-                          padding: '0.85rem 1rem',
-                          borderRadius: '0.375rem',
-                          backgroundColor: 'var(--surface)',
-                          border: '1px solid var(--surface-border)',
-                          color: '#fff',
-                          fontSize: '0.95rem',
-                          outline: 'none'
-                        }}
-                      />
-                    </div>
-
-                    {/* Payment Ref */}
-                    <div>
-                      <label htmlFor="payRef" style={{ display: 'block', fontSize: '0.85rem', color: 'var(--foreground-muted)', marginBottom: '0.5rem', fontWeight: 600 }}>
-                        ID Transaksi / Nomor Referensi *
-                      </label>
-                      <input 
-                        type="text"
-                        id="payRef"
-                        value={paymentReference}
-                        onChange={(e) => setPaymentReference(e.target.value)}
-                        placeholder="Contoh: Ref-8273618 atau ID Gopay"
                         required
                         style={{
                           width: '100%',

@@ -12,8 +12,8 @@ export default function BookMobile() {
   // Form Inputs
   const [customerName, setCustomerName] = useState<string>('');
   const [customerPhone, setCustomerPhone] = useState<string>('');
-  const [paymentSender, setPaymentSender] = useState<string>('');
-  const [paymentReference, setPaymentReference] = useState<string>('');
+  const [paymentSender, setPaymentSender] = useState<string>('Tunai / Transfer');
+  const [paymentReference, setPaymentReference] = useState<string>('Manual');
   const [notes, setNotes] = useState<string>('');
   
   // Database states
@@ -543,16 +543,6 @@ export default function BookMobile() {
               <div>
                 <label style={{ display: 'block', fontSize: '0.8rem', color: '#a49e8f', marginBottom: '0.4rem', fontWeight: 600 }}>Nomor WhatsApp Aktif *</label>
                 <input type="tel" value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} placeholder="Contoh: 0812345678" required style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '0.5rem', backgroundColor: '#0c0c0d', border: '1px solid rgba(235, 220, 185, 0.15)', color: '#fff', fontSize: '0.9rem', outline: 'none', transition: 'all 0.2s' }} />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#a49e8f', marginBottom: '0.4rem', fontWeight: 600 }}>Pengirim Rekening / E-Wallet Anda *</label>
-                <input type="text" value={paymentSender} onChange={(e) => setPaymentSender(e.target.value)} placeholder="Contoh: Andi (DANA)" required style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '0.5rem', backgroundColor: '#0c0c0d', border: '1px solid rgba(235, 220, 185, 0.15)', color: '#fff', fontSize: '0.9rem', outline: 'none', transition: 'all 0.2s' }} />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#a49e8f', marginBottom: '0.4rem', fontWeight: 600 }}>ID Transaksi / Referensi Transfer *</label>
-                <input type="text" value={paymentReference} onChange={(e) => setPaymentReference(e.target.value)} placeholder="Contoh: TR-283123 atau ID GOPAY" required style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '0.5rem', backgroundColor: '#0c0c0d', border: '1px solid rgba(235, 220, 185, 0.15)', color: '#fff', fontSize: '0.9rem', outline: 'none', transition: 'all 0.2s' }} />
               </div>
 
               <div>
