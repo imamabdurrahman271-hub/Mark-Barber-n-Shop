@@ -86,7 +86,7 @@ Pembayaran DP Anda telah berhasil kami verifikasi. Booking Anda di Mark Barber n
 • Nomor Antrian Anda: ${queueNumber}
 
 Sistem antrian kami berjalan secara real-time. Anda dapat memantau urutan antrian live di toko kami tanpa harus menunggu lama di lokasi melalui link berikut:
-https://mark-barber-n-shop.vercel.app/queue
+https://markbarber.vercel.app/queue
 
 Sampai jumpa di barbershop!`;
 

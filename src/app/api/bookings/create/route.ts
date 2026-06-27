@@ -89,7 +89,7 @@ Ada pelanggan yang baru saja memesan slot online:
 • No Referensi: ${createdBooking.paymentReference || '-'}
 
 Silakan periksa mutasi rekening Anda, lalu lakukan konfirmasi pada dashboard admin:
-https://mark-barber-n-shop.vercel.app/admin`;
+https://markbarber.vercel.app/admin`;
 
       // Kirim pesan secara asynchronous (jangan memblokir response client)
       sendWhatsApp(adminWhatsApp, waMessage).catch(err => {
