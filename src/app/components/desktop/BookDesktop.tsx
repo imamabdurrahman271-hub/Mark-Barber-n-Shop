@@ -54,21 +54,28 @@ export default function BookDesktop() {
   // Fungsi untuk memvalidasi tanggal (hanya Senin-Jumat, dan mulai hari ini ke depan)
   const getMinDate = () => {
     const today = new Date();
-    return today.toISOString().split('T')[0];
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
   };
 
   const getMaxDate = () => {
     const today = new Date();
     const maxDate = new Date();
     maxDate.setDate(today.getDate() + 14); // Batasi booking maksimal 2 minggu ke depan
-    return maxDate.toISOString().split('T')[0];
+    const yyyy = maxDate.getFullYear();
+    const mm = String(maxDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(maxDate.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = e.target.value;
     if (!date) return;
     
-    const day = new Date(date).getDay();
+    const [year, month, dayStr] = date.split('-');
+    const day = new Date(Number(year), Number(month) - 1, Number(dayStr)).getDay();
     
     // 1. Cek Hari Libur Rutin (closedDays)
     if (shopSettings.closedDays.includes(day)) {
