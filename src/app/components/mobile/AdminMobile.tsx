@@ -46,6 +46,7 @@ export default function AdminMobile() {
   const [walkInServiceId, setWalkInServiceId] = useState('');
   
   // Filter tanggal laporan keuangan (Default: 7 hari terakhir)
+  const [dateFilterType, setDateFilterType] = useState<'today' | 'week' | 'month' | 'all' | 'custom'>('week');
   const [filterStartDate, setFilterStartDate] = useState('');
   const [filterEndDate, setFilterEndDate] = useState('');
 
@@ -456,21 +457,12 @@ export default function AdminMobile() {
       {/* TAB 3: FINANCE REPORT */}
       {activeTab === 'finance' && (
         <div className="animate-slide-up">
-          {/* Date Filter & Print triggers */}
           <div className="glass" style={{ padding: '1.25rem', borderRadius: '0.75rem', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.7rem', color: 'var(--foreground-muted)', marginBottom: '0.15rem' }}>Mulai</label>
-                <input type="date" value={filterStartDate} onChange={(e) => setFilterStartDate(e.target.value)} style={{ width: '100%', padding: '0.4rem', borderRadius: '0.25rem', backgroundColor: 'var(--surface-hover)', border: '1px solid var(--surface-border)', color: '#fff', fontSize: '0.8rem' }} />
-              </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.7rem', color: 'var(--foreground-muted)', marginBottom: '0.15rem' }}>Sampai</label>
-                <input type="date" value={filterEndDate} onChange={(e) => setFilterEndDate(e.target.value)} style={{ width: '100%', padding: '0.4rem', borderRadius: '0.25rem', backgroundColor: 'var(--surface-hover)', border: '1px solid var(--surface-border)', color: '#fff', fontSize: '0.8rem' }} />
-              </div>
-            </div>
+            {/* Preset Buttons */}
             <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap' }}>
               <button 
                 onClick={() => {
+                  setDateFilterType('today');
                   const today = new Date();
                   const yyyy = today.getFullYear();
                   const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -484,10 +476,11 @@ export default function AdminMobile() {
                   flex: 1,
                   padding: '0.4rem 0',
                   borderRadius: '0.25rem',
-                  backgroundColor: 'var(--surface-hover)',
-                  border: '1px solid var(--surface-border)',
+                  backgroundColor: dateFilterType === 'today' ? 'var(--primary)' : 'var(--surface-hover)',
+                  border: '1px solid ' + (dateFilterType === 'today' ? 'var(--primary)' : 'var(--surface-border)'),
                   color: '#fff',
                   fontSize: '0.75rem',
+                  fontWeight: dateFilterType === 'today' ? 'bold' : 'normal',
                   cursor: 'pointer'
                 }}
               >
@@ -495,18 +488,17 @@ export default function AdminMobile() {
               </button>
               <button 
                 onClick={() => {
+                  setDateFilterType('week');
                   const today = new Date();
-                  const firstDayOfWeek = new Date(today);
-                  const day = today.getDay();
-                  const diff = today.getDate() - day + (day === 0 ? -6 : 1);
-                  firstDayOfWeek.setDate(diff);
+                  const lastWeek = new Date();
+                  lastWeek.setDate(today.getDate() - 7);
                   const formatDate = (d: Date) => {
                     const yyyy = d.getFullYear();
                     const mm = String(d.getMonth() + 1).padStart(2, '0');
                     const dd = String(d.getDate()).padStart(2, '0');
                     return `${yyyy}-${mm}-${dd}`;
                   };
-                  setFilterStartDate(formatDate(firstDayOfWeek));
+                  setFilterStartDate(formatDate(lastWeek));
                   setFilterEndDate(formatDate(today));
                 }}
                 type="button"
@@ -514,10 +506,11 @@ export default function AdminMobile() {
                   flex: 1,
                   padding: '0.4rem 0',
                   borderRadius: '0.25rem',
-                  backgroundColor: 'var(--surface-hover)',
-                  border: '1px solid var(--surface-border)',
+                  backgroundColor: dateFilterType === 'week' ? 'var(--primary)' : 'var(--surface-hover)',
+                  border: '1px solid ' + (dateFilterType === 'week' ? 'var(--primary)' : 'var(--surface-border)'),
                   color: '#fff',
                   fontSize: '0.75rem',
+                  fontWeight: dateFilterType === 'week' ? 'bold' : 'normal',
                   cursor: 'pointer'
                 }}
               >
@@ -525,6 +518,7 @@ export default function AdminMobile() {
               </button>
               <button 
                 onClick={() => {
+                  setDateFilterType('month');
                   const today = new Date();
                   const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
                   const formatDate = (d: Date) => {
@@ -541,10 +535,11 @@ export default function AdminMobile() {
                   flex: 1,
                   padding: '0.4rem 0',
                   borderRadius: '0.25rem',
-                  backgroundColor: 'var(--surface-hover)',
-                  border: '1px solid var(--surface-border)',
+                  backgroundColor: dateFilterType === 'month' ? 'var(--primary)' : 'var(--surface-hover)',
+                  border: '1px solid ' + (dateFilterType === 'month' ? 'var(--primary)' : 'var(--surface-border)'),
                   color: '#fff',
                   fontSize: '0.75rem',
+                  fontWeight: dateFilterType === 'month' ? 'bold' : 'normal',
                   cursor: 'pointer'
                 }}
               >
@@ -552,6 +547,7 @@ export default function AdminMobile() {
               </button>
               <button 
                 onClick={() => {
+                  setDateFilterType('all');
                   setFilterStartDate('');
                   setFilterEndDate('');
                 }}
@@ -560,16 +556,78 @@ export default function AdminMobile() {
                   flex: 1,
                   padding: '0.4rem 0',
                   borderRadius: '0.25rem',
-                  backgroundColor: 'var(--surface-hover)',
-                  border: '1px solid var(--surface-border)',
+                  backgroundColor: dateFilterType === 'all' ? 'var(--primary)' : 'var(--surface-hover)',
+                  border: '1px solid ' + (dateFilterType === 'all' ? 'var(--primary)' : 'var(--surface-border)'),
                   color: '#fff',
                   fontSize: '0.75rem',
+                  fontWeight: dateFilterType === 'all' ? 'bold' : 'normal',
                   cursor: 'pointer'
                 }}
               >
-                Semua
+                Semua Data
+              </button>
+              <button 
+                onClick={() => {
+                  setDateFilterType('custom');
+                  if (!filterStartDate) {
+                    const today = new Date();
+                    const lastWeek = new Date();
+                    lastWeek.setDate(today.getDate() - 7);
+                    const formatDate = (d: Date) => {
+                      const yyyy = d.getFullYear();
+                      const mm = String(d.getMonth() + 1).padStart(2, '0');
+                      const dd = String(d.getDate()).padStart(2, '0');
+                      return `${yyyy}-${mm}-${dd}`;
+                    };
+                    setFilterStartDate(formatDate(lastWeek));
+                    setFilterEndDate(formatDate(today));
+                  }
+                }}
+                type="button"
+                style={{
+                  width: '100%',
+                  marginTop: '0.25rem',
+                  padding: '0.4rem 0',
+                  borderRadius: '0.25rem',
+                  backgroundColor: dateFilterType === 'custom' ? 'var(--primary)' : 'var(--surface-hover)',
+                  border: '1px solid ' + (dateFilterType === 'custom' ? 'var(--primary)' : 'var(--surface-border)'),
+                  color: '#fff',
+                  fontSize: '0.75rem',
+                  fontWeight: dateFilterType === 'custom' ? 'bold' : 'normal',
+                  cursor: 'pointer'
+                }}
+              >
+                Custom Tanggal
               </button>
             </div>
+
+            {/* Custom Date Inputs (only visible when type is custom) */}
+            {dateFilterType === 'custom' && (
+              <div className="animate-slide-up" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginTop: '0.25rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.7rem', color: 'var(--foreground-muted)', marginBottom: '0.15rem' }}>Mulai</label>
+                  <input 
+                    type="date" 
+                    value={filterStartDate} 
+                    onChange={(e) => setFilterStartDate(e.target.value)} 
+                    onClick={(e) => e.currentTarget.showPicker?.()} 
+                    onFocus={(e) => e.currentTarget.showPicker?.()} 
+                    style={{ width: '100%', padding: '0.4rem', borderRadius: '0.25rem', backgroundColor: 'var(--surface-hover)', border: '1px solid var(--surface-border)', color: '#fff', fontSize: '0.8rem' }} 
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.7rem', color: 'var(--foreground-muted)', marginBottom: '0.15rem' }}>Sampai</label>
+                  <input 
+                    type="date" 
+                    value={filterEndDate} 
+                    onChange={(e) => setFilterEndDate(e.target.value)} 
+                    onClick={(e) => e.currentTarget.showPicker?.()} 
+                    onFocus={(e) => e.currentTarget.showPicker?.()} 
+                    style={{ width: '100%', padding: '0.4rem', borderRadius: '0.25rem', backgroundColor: 'var(--surface-hover)', border: '1px solid var(--surface-border)', color: '#fff', fontSize: '0.8rem' }} 
+                  />
+                </div>
+              </div>
+            )}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
               <button onClick={handleExportExcel} className="btn btn-secondary" style={{ padding: '0.5rem', fontSize: '0.75rem' }}>
                 Ekspor Excel

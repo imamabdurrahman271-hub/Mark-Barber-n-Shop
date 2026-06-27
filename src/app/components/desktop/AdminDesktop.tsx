@@ -46,6 +46,7 @@ export default function AdminDesktop() {
   const [walkInServiceId, setWalkInServiceId] = useState('');
   
   // Filter tanggal laporan keuangan (Default: 7 hari terakhir)
+  const [dateFilterType, setDateFilterType] = useState<'today' | 'week' | 'month' | 'all' | 'custom'>('week');
   const [filterStartDate, setFilterStartDate] = useState('');
   const [filterEndDate, setFilterEndDate] = useState('');
 
@@ -594,17 +595,11 @@ export default function AdminDesktop() {
               border: '1px solid var(--surface-border)'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--foreground-muted)', marginBottom: '0.25rem' }}>Dari Tanggal</label>
-                  <input type="date" value={filterStartDate} onChange={(e) => setFilterStartDate(e.target.value)} style={{ padding: '0.5rem', borderRadius: '0.25rem', backgroundColor: 'var(--surface-hover)', border: '1px solid var(--surface-border)', color: '#fff', fontSize: '0.9rem' }} />
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--foreground-muted)', marginBottom: '0.25rem' }}>Sampai Tanggal</label>
-                  <input type="date" value={filterEndDate} onChange={(e) => setFilterEndDate(e.target.value)} style={{ padding: '0.5rem', borderRadius: '0.25rem', backgroundColor: 'var(--surface-hover)', border: '1px solid var(--surface-border)', color: '#fff', fontSize: '0.9rem' }} />
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '1.2rem' }}>
+                {/* Tombol preset filter tanggal */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                   <button 
                     onClick={() => {
+                      setDateFilterType('today');
                       const today = new Date();
                       const yyyy = today.getFullYear();
                       const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -617,52 +612,50 @@ export default function AdminDesktop() {
                     style={{
                       padding: '0.5rem 0.75rem',
                       borderRadius: '0.25rem',
-                      backgroundColor: 'var(--surface-hover)',
-                      border: '1px solid var(--surface-border)',
+                      backgroundColor: dateFilterType === 'today' ? 'var(--primary)' : 'var(--surface-hover)',
+                      border: '1px solid ' + (dateFilterType === 'today' ? 'var(--primary)' : 'var(--surface-border)'),
                       color: '#fff',
                       fontSize: '0.8rem',
                       cursor: 'pointer',
+                      fontWeight: dateFilterType === 'today' ? 'bold' : 'normal',
                       transition: 'all 0.2s'
                     }}
-                    onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--primary)'}
-                    onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--surface-border)'}
                   >
                     Hari Ini
                   </button>
                   <button 
                     onClick={() => {
+                      setDateFilterType('week');
                       const today = new Date();
-                      const firstDayOfWeek = new Date(today);
-                      const day = today.getDay();
-                      const diff = today.getDate() - day + (day === 0 ? -6 : 1);
-                      firstDayOfWeek.setDate(diff);
+                      const lastWeek = new Date();
+                      lastWeek.setDate(today.getDate() - 7);
                       const formatDate = (d: Date) => {
                         const yyyy = d.getFullYear();
                         const mm = String(d.getMonth() + 1).padStart(2, '0');
                         const dd = String(d.getDate()).padStart(2, '0');
                         return `${yyyy}-${mm}-${dd}`;
                       };
-                      setFilterStartDate(formatDate(firstDayOfWeek));
+                      setFilterStartDate(formatDate(lastWeek));
                       setFilterEndDate(formatDate(today));
                     }}
                     type="button"
                     style={{
                       padding: '0.5rem 0.75rem',
                       borderRadius: '0.25rem',
-                      backgroundColor: 'var(--surface-hover)',
-                      border: '1px solid var(--surface-border)',
+                      backgroundColor: dateFilterType === 'week' ? 'var(--primary)' : 'var(--surface-hover)',
+                      border: '1px solid ' + (dateFilterType === 'week' ? 'var(--primary)' : 'var(--surface-border)'),
                       color: '#fff',
                       fontSize: '0.8rem',
                       cursor: 'pointer',
+                      fontWeight: dateFilterType === 'week' ? 'bold' : 'normal',
                       transition: 'all 0.2s'
                     }}
-                    onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--primary)'}
-                    onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--surface-border)'}
                   >
                     Minggu Ini
                   </button>
                   <button 
                     onClick={() => {
+                      setDateFilterType('month');
                       const today = new Date();
                       const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
                       const formatDate = (d: Date) => {
@@ -678,20 +671,20 @@ export default function AdminDesktop() {
                     style={{
                       padding: '0.5rem 0.75rem',
                       borderRadius: '0.25rem',
-                      backgroundColor: 'var(--surface-hover)',
-                      border: '1px solid var(--surface-border)',
+                      backgroundColor: dateFilterType === 'month' ? 'var(--primary)' : 'var(--surface-hover)',
+                      border: '1px solid ' + (dateFilterType === 'month' ? 'var(--primary)' : 'var(--surface-border)'),
                       color: '#fff',
                       fontSize: '0.8rem',
                       cursor: 'pointer',
+                      fontWeight: dateFilterType === 'month' ? 'bold' : 'normal',
                       transition: 'all 0.2s'
                     }}
-                    onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--primary)'}
-                    onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--surface-border)'}
                   >
                     Bulan Ini
                   </button>
                   <button 
                     onClick={() => {
+                      setDateFilterType('all');
                       setFilterStartDate('');
                       setFilterEndDate('');
                     }}
@@ -699,19 +692,78 @@ export default function AdminDesktop() {
                     style={{
                       padding: '0.5rem 0.75rem',
                       borderRadius: '0.25rem',
-                      backgroundColor: 'var(--surface-hover)',
-                      border: '1px solid var(--surface-border)',
+                      backgroundColor: dateFilterType === 'all' ? 'var(--primary)' : 'var(--surface-hover)',
+                      border: '1px solid ' + (dateFilterType === 'all' ? 'var(--primary)' : 'var(--surface-border)'),
                       color: '#fff',
                       fontSize: '0.8rem',
                       cursor: 'pointer',
+                      fontWeight: dateFilterType === 'all' ? 'bold' : 'normal',
                       transition: 'all 0.2s'
                     }}
-                    onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--primary)'}
-                    onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--surface-border)'}
                   >
-                    Semua
+                    Semua Data
+                  </button>
+                  <button 
+                    onClick={() => {
+                      setDateFilterType('custom');
+                      if (!filterStartDate) {
+                        const today = new Date();
+                        const lastWeek = new Date();
+                        lastWeek.setDate(today.getDate() - 7);
+                        const formatDate = (d: Date) => {
+                          const yyyy = d.getFullYear();
+                          const mm = String(d.getMonth() + 1).padStart(2, '0');
+                          const dd = String(d.getDate()).padStart(2, '0');
+                          return `${yyyy}-${mm}-${dd}`;
+                        };
+                        setFilterStartDate(formatDate(lastWeek));
+                        setFilterEndDate(formatDate(today));
+                      }
+                    }}
+                    type="button"
+                    style={{
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: '0.25rem',
+                      backgroundColor: dateFilterType === 'custom' ? 'var(--primary)' : 'var(--surface-hover)',
+                      border: '1px solid ' + (dateFilterType === 'custom' ? 'var(--primary)' : 'var(--surface-border)'),
+                      color: '#fff',
+                      fontSize: '0.8rem',
+                      cursor: 'pointer',
+                      fontWeight: dateFilterType === 'custom' ? 'bold' : 'normal',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    Custom Tanggal
                   </button>
                 </div>
+
+                {/* Input tanggal custom yang hanya muncul jika memilih "Custom Tanggal" */}
+                {dateFilterType === 'custom' && (
+                  <div className="animate-slide-up" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginLeft: '0.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--foreground-muted)' }}>Mulai:</span>
+                      <input 
+                        type="date" 
+                        value={filterStartDate} 
+                        onChange={(e) => setFilterStartDate(e.target.value)} 
+                        onClick={(e) => e.currentTarget.showPicker?.()} 
+                        onFocus={(e) => e.currentTarget.showPicker?.()} 
+                        style={{ padding: '0.4rem 0.5rem', borderRadius: '0.25rem', backgroundColor: 'var(--surface-hover)', border: '1px solid var(--surface-border)', color: '#fff', fontSize: '0.85rem' }} 
+                      />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--foreground-muted)' }}>Sampai:</span>
+                      <input 
+                        type="date" 
+                        value={filterEndDate} 
+                        onChange={(e) => setFilterEndDate(e.target.value)} 
+                        onClick={(e) => e.currentTarget.showPicker?.()} 
+                        onFocus={(e) => e.currentTarget.showPicker?.()} 
+                        style={{ padding: '0.4rem 0.5rem', borderRadius: '0.25rem', backgroundColor: 'var(--surface-hover)', border: '1px solid var(--surface-border)', color: '#fff', fontSize: '0.85rem' }} 
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div style={{ display: 'flex', gap: '1rem' }}>
