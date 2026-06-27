@@ -12,8 +12,8 @@ export default function BookDesktop() {
   // Form State
   const [customerName, setCustomerName] = useState<string>('');
   const [customerPhone, setCustomerPhone] = useState<string>('');
-  const [paymentSender, setPaymentSender] = useState<string>('');
-  const [paymentReference, setPaymentReference] = useState<string>('Manual');
+  const [paymentSender, setPaymentSender] = useState<string>('Tunai');
+  const [paymentReference, setPaymentReference] = useState<string>('Bayar di Tempat');
   const [notes, setNotes] = useState<string>('');
   
   // Database states
@@ -547,9 +547,9 @@ export default function BookDesktop() {
                   Kembali ke Pilih Jadwal
                 </button>
 
-                 <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.5rem', color: '#fff' }}>Form Pembayaran & Data Kontak</h2>
+                  <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.5rem', color: '#fff' }}>Form Data Kontak & Booking</h2>
                 <p style={{ color: 'var(--foreground-muted)', marginBottom: '2rem', fontSize: '0.95rem' }}>
-                  Mohon isi detail kontak dan nama pengirim transfer Anda di bawah ini.
+                  Mohon isi detail kontak Anda di bawah ini untuk menyelesaikan booking. Pembayaran dilakukan secara tunai di tempat.
                 </p>
 
                 <form onSubmit={handleSubmitBooking}>
@@ -604,31 +604,6 @@ export default function BookDesktop() {
                         }}
                       />
                     </div>
-                  </div>
-
-                  {/* Sender Account */}
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <label htmlFor="senderAcc" style={{ display: 'block', fontSize: '0.85rem', color: 'var(--foreground-muted)', marginBottom: '0.5rem', fontWeight: 600 }}>
-                      Nama Pengirim Transfer *
-                    </label>
-                    <input 
-                      type="text"
-                      id="senderAcc"
-                      value={paymentSender}
-                      onChange={(e) => setPaymentSender(e.target.value)}
-                      placeholder="Contoh: Budi Susanto (BCA/GOPAY)"
-                      required
-                      style={{
-                        width: '100%',
-                        padding: '0.85rem 1rem',
-                        borderRadius: '0.375rem',
-                        backgroundColor: 'var(--surface)',
-                        border: '1px solid var(--surface-border)',
-                        color: '#fff',
-                        fontSize: '0.95rem',
-                        outline: 'none'
-                      }}
-                    />
                   </div>
 
                   {/* Notes */}
@@ -732,29 +707,10 @@ export default function BookDesktop() {
                       fontSize: '0.85rem'
                     }}>
                       <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: 700, display: 'block', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
-                        Tujuan Transfer Bank:
+                        Metode Pembayaran:
                       </span>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', color: 'var(--foreground-muted)' }}>
-                        <div>BCA: <strong style={{ color: '#fff' }}>777-12345-67</strong> (Arif)</div>
-                        <div>GOPAY/OVO: <strong style={{ color: '#fff' }}>0811-2160-042</strong></div>
-                        <div>DANA: <strong style={{ color: '#fff' }}>0811-2160-042</strong></div>
-                      </div>
-                      
-                      {/* QRIS Image */}
-                      <div style={{ marginTop: '1rem', textAlign: 'center', backgroundColor: '#000', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid var(--surface-border)' }} className="qris-container">
-                        <img 
-                          src="/qris.png" 
-                          alt="QRIS Mark Barber" 
-                          style={{ maxWidth: '100%', height: 'auto', borderRadius: '0.25rem', display: 'block', margin: '0 auto' }}
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                            const parent = e.currentTarget.parentElement;
-                            if (parent) {
-                              parent.style.display = 'none';
-                            }
-                          }}
-                        />
-                        <span style={{ fontSize: '0.7rem', color: 'var(--foreground-muted)', display: 'block', marginTop: '0.35rem' }}>Scan QRIS Resmi</span>
+                      <div style={{ color: 'var(--foreground-muted)', lineHeight: '1.5' }}>
+                        Bayar langsung di tempat secara <strong style={{ color: '#fff' }}>Tunai / Cash</strong> setelah selesai cukur.
                       </div>
                     </div>
                   )}

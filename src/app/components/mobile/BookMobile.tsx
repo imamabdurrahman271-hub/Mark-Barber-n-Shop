@@ -12,8 +12,8 @@ export default function BookMobile() {
   // Form Inputs
   const [customerName, setCustomerName] = useState<string>('');
   const [customerPhone, setCustomerPhone] = useState<string>('');
-  const [paymentSender, setPaymentSender] = useState<string>('');
-  const [paymentReference, setPaymentReference] = useState<string>('Manual');
+  const [paymentSender, setPaymentSender] = useState<string>('Tunai');
+  const [paymentReference, setPaymentReference] = useState<string>('Bayar di Tempat');
   const [notes, setNotes] = useState<string>('');
   
   // Database states
@@ -584,47 +584,11 @@ export default function BookMobile() {
             boxShadow: '0 8px 24px rgba(0,0,0,0.3)'
           }}>
             <h4 style={{ color: '#ebdcb9', fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '1.1rem', borderBottom: '1px solid rgba(235, 220, 185, 0.1)', paddingBottom: '0.5rem' }}>
-              Rekening Transfer Resmi
+              Metode Pembayaran
             </h4>
-            <p style={{ fontSize: '0.8rem', color: '#a49e8f', marginBottom: '1.25rem', lineHeight: '1.5' }}>
-              Silakan lakukan transfer penuh sebesar <strong style={{ color: '#ebdcb9', fontSize: '0.9rem' }}>Rp {selectedService.price.toLocaleString('id-ID')}</strong> ke salah satu akun di bawah:
+            <p style={{ fontSize: '0.85rem', color: '#a49e8f', lineHeight: '1.5', margin: 0 }}>
+              Silakan lakukan pembayaran langsung di tempat secara <strong style={{ color: '#ebdcb9' }}>Tunai / Cash</strong> sebesar <strong style={{ color: '#fff', fontSize: '0.95rem' }}>Rp {selectedService.price.toLocaleString('id-ID')}</strong> setelah selesai cukur.
             </p>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', fontSize: '0.8rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px dashed rgba(235, 220, 185, 0.1)', paddingBottom: '0.5rem' }}>
-                <span style={{ color: '#a49e8f' }}>QRIS Mark Barber</span>
-                <strong style={{ color: '#ebdcb9' }}>[ Scan di Bawah ]</strong>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px dashed rgba(235, 220, 185, 0.1)', paddingBottom: '0.5rem' }}>
-                <span style={{ color: '#a49e8f' }}>BCA (Arif)</span>
-                <strong style={{ color: '#fff', letterSpacing: '0.5px' }}>777-12345-67</strong>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px dashed rgba(235, 220, 185, 0.1)', paddingBottom: '0.5rem' }}>
-                <span style={{ color: '#a49e8f' }}>GOPAY (Arif)</span>
-                <strong style={{ color: '#fff', letterSpacing: '0.5px' }}>0811-2160-042</strong>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.1rem' }}>
-                <span style={{ color: '#a49e8f' }}>DANA (Arif)</span>
-                <strong style={{ color: '#fff', letterSpacing: '0.5px' }}>0811-2160-042</strong>
-              </div>
-            </div>
-
-            {/* QRIS Image */}
-            <div style={{ marginTop: '1.25rem', textAlign: 'center', backgroundColor: '#050505', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid rgba(235, 220, 185, 0.1)' }}>
-              <img 
-                src="/qris.png" 
-                alt="QRIS Mark Barber" 
-                style={{ maxWidth: '180px', height: 'auto', borderRadius: '0.25rem', display: 'block', margin: '0 auto' }}
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  const parent = e.currentTarget.parentElement;
-                  if (parent) {
-                    parent.style.display = 'none';
-                  }
-                }}
-              />
-              <span style={{ fontSize: '0.7rem', color: '#a49e8f', display: 'block', marginTop: '0.35rem' }}>Scan QRIS Resmi</span>
-            </div>
           </div>
 
           {/* Form */}
@@ -638,11 +602,6 @@ export default function BookMobile() {
               <div>
                 <label style={{ display: 'block', fontSize: '0.8rem', color: '#a49e8f', marginBottom: '0.4rem', fontWeight: 600 }}>Nomor WhatsApp Aktif *</label>
                 <input type="tel" value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} placeholder="Contoh: 0812345678" required style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '0.5rem', backgroundColor: '#0c0c0d', border: '1px solid rgba(235, 220, 185, 0.15)', color: '#fff', fontSize: '0.9rem', outline: 'none', transition: 'all 0.2s' }} />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#a49e8f', marginBottom: '0.4rem', fontWeight: 600 }}>Nama Pengirim Transfer *</label>
-                <input type="text" value={paymentSender} onChange={(e) => setPaymentSender(e.target.value)} placeholder="Contoh: Andi (BCA/DANA)" required style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '0.5rem', backgroundColor: '#0c0c0d', border: '1px solid rgba(235, 220, 185, 0.15)', color: '#fff', fontSize: '0.9rem', outline: 'none', transition: 'all 0.2s' }} />
               </div>
 
               <div>
