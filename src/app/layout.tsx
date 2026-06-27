@@ -68,14 +68,16 @@ export default async function RootLayout({
               letterSpacing: '1px',
               textTransform: 'uppercase'
             }}>
-              {/* Scissors Icon */}
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="6" cy="6" r="3" />
-                <circle cx="6" cy="18" r="3" />
-                <line x1="20" y1="4" x2="8.12" y2="15.88" />
-                <line x1="14.47" y1="14.48" x2="20" y2="20" />
-                <line x1="8.12" y1="8.12" x2="12" y2="12" />
-              </svg>
+              <img 
+                src="/logo.webp" 
+                alt="Mark Barber logo" 
+                style={{ 
+                  height: '2.5rem', 
+                  width: 'auto',
+                  borderRadius: '0.25rem',
+                  objectFit: 'contain'
+                }} 
+              />
               <span>Mark Barber <span style={{ color: 'var(--primary)' }}>n Shop</span></span>
             </a>
 

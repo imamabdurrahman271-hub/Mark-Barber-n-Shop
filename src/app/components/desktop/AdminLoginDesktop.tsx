@@ -57,21 +57,24 @@ export default function AdminLoginDesktop() {
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '4rem',
-            height: '4rem',
+            width: '5.5rem',
+            height: '5.5rem',
             borderRadius: '50%',
+            overflow: 'hidden',
             backgroundColor: 'var(--surface)',
             border: '2px solid var(--primary)',
             boxShadow: '0 0 20px var(--primary-glow)',
             marginBottom: '1.25rem'
           }}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2.5">
-              <circle cx="6" cy="6" r="3" />
-              <circle cx="6" cy="18" r="3" />
-              <line x1="20" y1="4" x2="8.12" y2="15.88" />
-              <line x1="14.47" y1="14.48" x2="20" y2="20" />
-              <line x1="8.12" y1="8.12" x2="12" y2="12" />
-            </svg>
+            <img 
+              src="/logo.webp" 
+              alt="Logo" 
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'cover' 
+              }} 
+            />
           </div>
           <h1 className="gold-gradient-text" style={{ fontSize: '2rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '2px' }}>
             Mark Barber n Shop

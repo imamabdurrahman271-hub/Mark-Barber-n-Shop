@@ -799,6 +799,17 @@ export default function BookMobile() {
 
             {/* High-fidelity Vector Barcode */}
             <div style={{ borderTop: '1px dashed rgba(235, 220, 185, 0.2)', paddingTop: '1.25rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.35rem' }}>
+              <img 
+                src="/logo.webp" 
+                alt="Logo" 
+                style={{ 
+                  height: '2.25rem', 
+                  width: 'auto',
+                  opacity: 0.85,
+                  marginBottom: '0.5rem',
+                  objectFit: 'contain'
+                }} 
+              />
               <svg width="180" height="35" viewBox="0 0 180 35">
                 {Array.from({ length: 32 }).map((_, idx) => {
                   const widths = [1, 2, 3, 4];

@@ -82,7 +82,7 @@ export const SOLO_STAFF: Staff = {
   id: 'solo-barber-owner',
   displayName: "Bang Arif",
   bio: "Master Barber & Stylist Specialist. Berpengalaman dalam haircutting, shaving, pengeritingan (perm), dan pengerjaan rambut gimbal (dreadlocks).",
-  avatarUrl: "https://lh3.googleusercontent.com/l9m1V34JHLZVqb2fWcP94Dq4qK_j-8JzKLs0_IhZBRU7MVcKy3CK9a8lRat7AnBV8FaU3VRfqALenmbN5Uui8d0ligRh6rNgcw"
+  avatarUrl: "/logo.webp"
 };
 
 // 2. Realtime & Database Layer dengan Supabase

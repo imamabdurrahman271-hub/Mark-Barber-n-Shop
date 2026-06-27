@@ -908,6 +908,17 @@ export default function BookDesktop() {
               alignItems: 'center',
               gap: '0.5rem'
             }}>
+              <img 
+                src="/logo.webp" 
+                alt="Logo" 
+                style={{ 
+                  height: '2.5rem', 
+                  width: 'auto',
+                  opacity: 0.8,
+                  marginBottom: '0.75rem',
+                  objectFit: 'contain'
+                }} 
+              />
               <svg width="220" height="45" viewBox="0 0 220 45">
                 {Array.from({ length: 38 }).map((_, idx) => {
                   const width = [1, 2, 3, 4][Math.floor(Math.random() * 4)];
