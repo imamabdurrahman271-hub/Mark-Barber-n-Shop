@@ -554,20 +554,43 @@ export default function BookMobile() {
 
             {/* Submit */}
             {selectedDate && selectedTime && (
-              <button type="submit" className="btn animate-slide-up" style={{ 
-                width: '100%', 
-                padding: '1rem', 
-                fontSize: '0.95rem',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '1px',
-                background: 'linear-gradient(135deg, #f4ebd0 0%, #ebdcb9 100%)',
-                color: '#050505',
-                borderRadius: '0.75rem',
-                boxShadow: '0 4px 20px rgba(235, 220, 185, 0.25)'
-              }}>
-                Lanjut ke Pembayaran
-              </button>
+              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '2rem' }} className="animate-slide-up">
+                <button 
+                  type="button" 
+                  onClick={() => setStep(1)} 
+                  className="btn" 
+                  style={{ 
+                    flex: 1, 
+                    padding: '1rem', 
+                    fontSize: '0.9rem', 
+                    fontWeight: 700, 
+                    textTransform: 'uppercase', 
+                    borderRadius: '0.75rem',
+                    backgroundColor: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(235, 220, 185, 0.2)',
+                    color: '#fff'
+                  }}
+                >
+                  Kembali
+                </button>
+                <button 
+                  type="submit" 
+                  className="btn" 
+                  style={{ 
+                    flex: 2, 
+                    padding: '1rem', 
+                    fontSize: '0.9rem', 
+                    fontWeight: 700, 
+                    textTransform: 'uppercase', 
+                    background: 'linear-gradient(135deg, #f4ebd0 0%, #ebdcb9 100%)',
+                    color: '#050505',
+                    borderRadius: '0.75rem',
+                    boxShadow: '0 4px 20px rgba(235, 220, 185, 0.25)' 
+                  }}
+                >
+                  Lanjut
+                </button>
+              </div>
             )}
           </form>
         </div>
@@ -640,21 +663,43 @@ export default function BookMobile() {
                 <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Model rambut undercut, dll." rows={2} style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '0.5rem', backgroundColor: '#0c0c0d', border: '1px solid rgba(235, 220, 185, 0.15)', color: '#fff', fontSize: '0.9rem', outline: 'none', resize: 'none', transition: 'all 0.2s' }} />
               </div>
 
-              <button type="submit" className="btn" style={{ 
-                width: '100%', 
-                padding: '1rem', 
-                fontSize: '0.95rem',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '1px',
-                background: 'linear-gradient(135deg, #f4ebd0 0%, #ebdcb9 100%)',
-                color: '#050505',
-                borderRadius: '0.75rem',
-                boxShadow: '0 4px 20px rgba(235, 220, 185, 0.25)',
-                marginTop: '1.25rem'
-              }}>
-                Kirim Booking & Konfirmasi
-              </button>
+              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
+                <button 
+                  type="button" 
+                  onClick={() => setStep(2)} 
+                  className="btn" 
+                  style={{ 
+                    flex: 1, 
+                    padding: '1rem', 
+                    fontSize: '0.9rem', 
+                    fontWeight: 700, 
+                    textTransform: 'uppercase', 
+                    borderRadius: '0.75rem',
+                    backgroundColor: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(235, 220, 185, 0.2)',
+                    color: '#fff'
+                  }}
+                >
+                  Kembali
+                </button>
+                <button 
+                  type="submit" 
+                  className="btn" 
+                  style={{ 
+                    flex: 2, 
+                    padding: '1rem', 
+                    fontSize: '0.9rem', 
+                    fontWeight: 700, 
+                    textTransform: 'uppercase', 
+                    background: 'linear-gradient(135deg, #f4ebd0 0%, #ebdcb9 100%)',
+                    color: '#050505',
+                    borderRadius: '0.75rem',
+                    boxShadow: '0 4px 20px rgba(235, 220, 185, 0.25)' 
+                  }}
+                >
+                  Konfirmasi
+                </button>
+              </div>
             </div>
           </form>
         </div>

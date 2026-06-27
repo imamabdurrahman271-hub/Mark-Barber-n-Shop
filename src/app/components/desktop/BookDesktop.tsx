@@ -556,10 +556,25 @@ export default function BookDesktop() {
                   )}
 
                   {selectedDate && selectedTime && (
-                    <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '1rem', fontSize: '1rem' }}>
-                      Lanjut ke Pembayaran
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                    </button>
+                    <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+                      <button 
+                        type="button" 
+                        onClick={() => setStep(1)} 
+                        className="btn btn-secondary" 
+                        style={{ flex: 1, padding: '1rem', fontSize: '1.05rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        Kembali
+                      </button>
+                      <button 
+                        type="submit" 
+                        className="btn btn-primary" 
+                        style={{ flex: 2, padding: '1rem', fontSize: '1.05rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                      >
+                        Lanjut ke Pembayaran
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                      </button>
+                    </div>
                   )}
                 </form>
               </div>
@@ -671,10 +686,25 @@ export default function BookDesktop() {
                     />
                   </div>
 
-                  <button type="submit" className="btn btn-primary glow-pulse" style={{ width: '100%', padding: '1rem', fontSize: '1rem' }}>
-                    Kirim Formulir Booking & Konfirmasi
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  </button>
+                  <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+                    <button 
+                      type="button" 
+                      onClick={() => setStep(2)} 
+                      className="btn btn-secondary" 
+                      style={{ flex: 1, padding: '1rem', fontSize: '1.05rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                      Kembali
+                    </button>
+                    <button 
+                      type="submit" 
+                      className="btn btn-primary glow-pulse" 
+                      style={{ flex: 2, padding: '1rem', fontSize: '1.05rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                    >
+                      Konfirmasi Booking
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </button>
+                  </div>
                 </form>
               </div>
             )}
