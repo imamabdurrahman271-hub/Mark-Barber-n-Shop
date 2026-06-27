@@ -33,6 +33,32 @@ export default async function RootLayout({
           <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             {children}
           </main>
+          {/* Floating WhatsApp Button for Mobile */}
+          <a 
+            href="https://wa.me/6285382926336" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{
+              position: 'fixed',
+              bottom: '6.5rem',
+              right: '1.25rem',
+              backgroundColor: '#25d366',
+              color: '#fff',
+              width: '3.25rem',
+              height: '3.25rem',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 4px 15px rgba(37, 211, 102, 0.4)',
+              zIndex: 9999
+            }}
+            aria-label="Hubungi WhatsApp"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.003 5.324 5.328.001 11.894 0c3.18.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.57-5.328 11.892-11.893 11.893-1.997-.001-3.957-.502-5.7-1.45L0 24zm6.59-4.846c1.6.95 3.197 1.489 4.887 1.49 5.33-.001 9.67-4.34 9.67-9.67 0-2.584-1.005-5.01-2.83-6.837C16.49 2.31 14.06 1.304 11.478 1.305c-5.33 0-9.67 4.34-9.67 9.67 0 1.764.487 3.393 1.414 4.888L2.148 20.1l4.5-1.155zM17.486 15c-.3-.15-1.782-.88-2.062-1-.28-.105-.485-.15-.69.15-.205.3-.79.99-.97 1.2-.18.205-.36.23-.66.075-3.002-1.246-4.59-2.596-5.46-4.095-.22-.38.22-.35.635-1.17.11-.22.055-.41-.027-.56-.083-.15-.69-1.666-.943-2.277-.247-.59-.5-.51-.69-.52-.18-.01-.385-.01-.59-.01-.205 0-.54.075-.823.385-.283.31-1.08 1.055-1.08 2.574 0 1.52 1.107 2.99 1.26 3.2 1.5 2.025 3.32 3.12 5.3 3.12 1.62 0 2.97-.24 3.99-.57.38-.13 1.07-.63 1.22-1.22.15-.59.15-1.1.1-1.2-.05-.1-.2-.15-.5-.3z"/>
+            </svg>
+          </a>
         </body>
       </html>
     );
@@ -183,6 +209,41 @@ export default async function RootLayout({
             <p>&copy; {new Date().getFullYear()} Mark Barber n Shop. All rights reserved.</p>
           </div>
         </footer>
+        {/* Floating WhatsApp Button for Desktop */}
+        <a 
+          href="https://wa.me/6285382926336" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          style={{
+            position: 'fixed',
+            bottom: '2rem',
+            right: '2rem',
+            backgroundColor: '#25d366',
+            color: '#fff',
+            width: '3.5rem',
+            height: '3.5rem',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 4px 20px rgba(37, 211, 102, 0.4)',
+            zIndex: 9999,
+            transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.15) rotate(5deg)';
+            e.currentTarget.style.boxShadow = '0 6px 25px rgba(37, 211, 102, 0.6)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
+            e.currentTarget.style.boxShadow = '0 4px 20px rgba(37, 211, 102, 0.4)';
+          }}
+          aria-label="Hubungi WhatsApp"
+        >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.003 5.324 5.328.001 11.894 0c3.18.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.57-5.328 11.892-11.893 11.893-1.997-.001-3.957-.502-5.7-1.45L0 24zm6.59-4.846c1.6.95 3.197 1.489 4.887 1.49 5.33-.001 9.67-4.34 9.67-9.67 0-2.584-1.005-5.01-2.83-6.837C16.49 2.31 14.06 1.304 11.478 1.305c-5.33 0-9.67 4.34-9.67 9.67 0 1.764.487 3.393 1.414 4.888L2.148 20.1l4.5-1.155zM17.486 15c-.3-.15-1.782-.88-2.062-1-.28-.105-.485-.15-.69.15-.205.3-.79.99-.97 1.2-.18.205-.36.23-.66.075-3.002-1.246-4.59-2.596-5.46-4.095-.22-.38.22-.35.635-1.17.11-.22.055-.41-.027-.56-.083-.15-.69-1.666-.943-2.277-.247-.59-.5-.51-.69-.52-.18-.01-.385-.01-.59-.01-.205 0-.54.075-.823.385-.283.31-1.08 1.055-1.08 2.574 0 1.52 1.107 2.99 1.26 3.2 1.5 2.025 3.32 3.12 5.3 3.12 1.62 0 2.97-.24 3.99-.57.38-.13 1.07-.63 1.22-1.22.15-.59.15-1.1.1-1.2-.05-.1-.2-.15-.5-.3z"/>
+          </svg>
+        </a>
       </body>
     </html>
   );
