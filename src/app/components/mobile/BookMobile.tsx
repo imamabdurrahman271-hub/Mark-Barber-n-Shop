@@ -370,6 +370,16 @@ export default function BookMobile() {
                 id="bookingDate"
                 value={selectedDate}
                 onChange={handleDateChange}
+                onClick={(e) => {
+                  try {
+                    e.currentTarget.showPicker();
+                  } catch (err) {}
+                }}
+                onFocus={(e) => {
+                  try {
+                    e.currentTarget.showPicker();
+                  } catch (err) {}
+                }}
                 min={getMinDate()}
                 max={getMaxDate()}
                 required
@@ -383,7 +393,8 @@ export default function BookMobile() {
                   fontSize: '0.95rem',
                   outline: 'none',
                   boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.5)',
-                  fontFamily: 'inherit'
+                  fontFamily: 'inherit',
+                  cursor: 'pointer'
                 }}
               />
             </div>

@@ -367,6 +367,16 @@ export default function BookDesktop() {
                       id="bookingDate"
                       value={selectedDate}
                       onChange={handleDateChange}
+                      onClick={(e) => {
+                        try {
+                          e.currentTarget.showPicker();
+                        } catch (err) {}
+                      }}
+                      onFocus={(e) => {
+                        try {
+                          e.currentTarget.showPicker();
+                        } catch (err) {}
+                      }}
                       min={getMinDate()}
                       max={getMaxDate()}
                       required
@@ -378,7 +388,8 @@ export default function BookDesktop() {
                         border: '1px solid var(--surface-border)',
                         color: '#fff',
                         fontSize: '1rem',
-                        outline: 'none'
+                        outline: 'none',
+                        cursor: 'pointer'
                       }}
                     />
                   </div>
