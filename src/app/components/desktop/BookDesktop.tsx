@@ -38,16 +38,83 @@ export default function BookDesktop() {
       setExistingBookings(bookings);
       setShopSettings(settings);
       
-      // Set default selected service ID to the first service if available
-      if (services.length > 0) {
+      // Load saved state from sessionStorage
+      const savedStep = sessionStorage.getItem('book_step');
+      const savedServiceId = sessionStorage.getItem('book_selectedServiceId');
+      const savedDate = sessionStorage.getItem('book_selectedDate');
+      const savedTime = sessionStorage.getItem('book_selectedTime');
+      const savedCustName = sessionStorage.getItem('book_customerName');
+      const savedCustPhone = sessionStorage.getItem('book_customerPhone');
+      const savedPaymentSender = sessionStorage.getItem('book_paymentSender');
+      const savedNotes = sessionStorage.getItem('book_notes');
+
+      if (savedStep) setStep(Number(savedStep) as any);
+      if (savedServiceId) {
+        setSelectedServiceId(savedServiceId);
+      } else if (services.length > 0) {
         setSelectedServiceId(services[0].id);
       }
+      if (savedDate) setSelectedDate(savedDate);
+      if (savedTime) setSelectedTime(savedTime);
+      if (savedCustName) setCustomerName(savedCustName);
+      if (savedCustPhone) setCustomerPhone(savedCustPhone);
+      if (savedPaymentSender) setPaymentSender(savedPaymentSender);
+      if (savedNotes) setNotes(savedNotes);
+
       setIsLoading(false);
     }).catch(err => {
       console.error('Error loading booking data:', err);
       setIsLoading(false);
     });
   }, []);
+
+  useEffect(() => {
+    if (!isLoading) {
+      sessionStorage.setItem('book_step', String(step));
+    }
+  }, [step, isLoading]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      sessionStorage.setItem('book_selectedServiceId', selectedServiceId);
+    }
+  }, [selectedServiceId, isLoading]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      sessionStorage.setItem('book_selectedDate', selectedDate);
+    }
+  }, [selectedDate, isLoading]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      sessionStorage.setItem('book_selectedTime', selectedTime);
+    }
+  }, [selectedTime, isLoading]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      sessionStorage.setItem('book_customerName', customerName);
+    }
+  }, [customerName, isLoading]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      sessionStorage.setItem('book_customerPhone', customerPhone);
+    }
+  }, [customerPhone, isLoading]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      sessionStorage.setItem('book_paymentSender', paymentSender);
+    }
+  }, [paymentSender, isLoading]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      sessionStorage.setItem('book_notes', notes);
+    }
+  }, [notes, isLoading]);
 
   const selectedService = services.find(s => s.id === selectedServiceId);
 
@@ -147,6 +214,17 @@ export default function BookDesktop() {
     try {
       const newBooking = await createBooking(bookingInput);
       setCreatedBooking(newBooking);
+      
+      // Hapus data booking di sessionStorage setelah sukses
+      sessionStorage.removeItem('book_step');
+      sessionStorage.removeItem('book_selectedServiceId');
+      sessionStorage.removeItem('book_selectedDate');
+      sessionStorage.removeItem('book_selectedTime');
+      sessionStorage.removeItem('book_customerName');
+      sessionStorage.removeItem('book_customerPhone');
+      sessionStorage.removeItem('book_paymentSender');
+      sessionStorage.removeItem('book_notes');
+      
       setStep(4);
     } catch (err) {
       alert("Gagal membuat reservasi. Silakan coba kembali.");
