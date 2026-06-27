@@ -5,7 +5,7 @@ export async function POST(request: Request) {
   try {
     const { id, title, price, durationMins, description, category } = await request.json();
 
-    const updateData: any = {};
+    const updateData: Record<string, string | number | undefined> = {};
     if (title !== undefined) updateData.title = title;
     if (price !== undefined) updateData.price = price;
     if (durationMins !== undefined) updateData.duration_mins = durationMins;

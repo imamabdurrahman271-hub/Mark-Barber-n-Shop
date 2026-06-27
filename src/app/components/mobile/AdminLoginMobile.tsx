@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 export default function AdminLoginMobile() {
   const [email, setEmail] = useState('');
@@ -175,7 +176,7 @@ export default function AdminLoginMobile() {
 
       {/* Back Link */}
       <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-        <a href="/" style={{
+        <Link href="/" style={{
           color: 'var(--foreground-muted)',
           fontSize: '0.85rem',
           textDecoration: 'none',
@@ -189,7 +190,7 @@ export default function AdminLoginMobile() {
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
           Kembali ke Beranda
-        </a>
+        </Link>
       </div>
 
     </div>

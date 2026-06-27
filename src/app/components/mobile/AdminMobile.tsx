@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { 
   getAdminInitData,
   updateBookingStatus, 
@@ -61,41 +62,48 @@ export default function AdminMobile() {
     }
   };
 
-  const refreshData = () => {
+  const refreshData = useCallback(() => {
     setIsLoading(true);
     getAdminInitData().then(({ bookings, queues, services, settings }) => {
       setBookings(bookings);
       setQueues(queues);
       setServices(services);
       setShopSettings(settings);
-      if (services.length > 0 && !walkInServiceId) {
-        setWalkInServiceId(services[0].id);
-      }
+      setWalkInServiceId(prev => {
+        if (services.length > 0 && !prev) {
+          return services[0].id;
+        }
+        return prev;
+      });
       setIsLoading(false);
     }).catch(err => {
       console.error('Error refreshing admin data:', err);
       setIsLoading(false);
     });
-  };
+  }, []);
 
   useEffect(() => {
-    refreshData();
+    const init = async () => {
+      refreshData();
+      
+      const today = new Date();
+      const lastWeek = new Date();
+      lastWeek.setDate(today.getDate() - 7);
+      setFilterStartDate(lastWeek.toISOString().split('T')[0]);
+      setFilterEndDate(today.toISOString().split('T')[0]);
+    };
+    init();
+
     const unsubscribeBookings = subscribeToBookings(() => {
       getBookings().then(setBookings);
     });
     const unsubscribeQueue = subscribeToQueue(refreshData);
-    
-    const today = new Date();
-    const lastWeek = new Date();
-    lastWeek.setDate(today.getDate() - 7);
-    setFilterStartDate(lastWeek.toISOString().split('T')[0]);
-    setFilterEndDate(today.toISOString().split('T')[0]);
 
     return () => {
       unsubscribeBookings();
       unsubscribeQueue();
     };
-  }, []);
+  }, [refreshData]);
 
   const pendingBookings = bookings.filter(b => b.status === 'pending');
   const activeQueues = queues.filter(q => q.status === 'waiting' || q.status === 'serving');
@@ -276,7 +284,7 @@ export default function AdminMobile() {
         ].map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id as 'bookings' | 'queue' | 'finance' | 'services' | 'settings')}
             style={{
               flexShrink: 0,
               padding: '0.6rem 1.25rem',
@@ -749,22 +757,22 @@ export default function AdminMobile() {
         zIndex: 40,
         backdropFilter: 'blur(16px)'
       }}>
-        <a href="/" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem', color: 'var(--foreground-muted)' }}>
+        <Link href="/" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem', color: 'var(--foreground-muted)' }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
           <span style={{ fontSize: '0.65rem' }}>Home</span>
-        </a>
-        <a href="/book" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem', color: 'var(--foreground-muted)' }}>
+        </Link>
+        <Link href="/book" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem', color: 'var(--foreground-muted)' }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
           <span style={{ fontSize: '0.65rem' }}>Booking</span>
-        </a>
-        <a href="/queue" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem', color: 'var(--foreground-muted)' }}>
+        </Link>
+        <Link href="/queue" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem', color: 'var(--foreground-muted)' }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
           <span style={{ fontSize: '0.65rem' }}>Antrian</span>
-        </a>
-        <a href="/admin" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem', color: 'var(--primary)' }}>
+        </Link>
+        <Link href="/admin" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem', color: 'var(--primary)' }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
           <span style={{ fontSize: '0.65rem', fontWeight: 600 }}>Admin</span>
-        </a>
+        </Link>
       </div>
     </div>
   );

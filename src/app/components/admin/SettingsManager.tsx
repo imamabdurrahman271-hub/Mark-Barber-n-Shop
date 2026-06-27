@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { updateShopSettings, ShopSettings } from '@/lib/db';
 
 interface SettingsManagerProps {
@@ -27,14 +27,14 @@ export default function SettingsManager({ settings, onRefresh }: SettingsManager
   const [closedDays, setClosedDays] = useState<number[]>(settings.closedDays);
   const [holidays, setHolidays] = useState<string[]>(settings.holidays);
 
-  // Synchronize prop changes to state
-  useEffect(() => {
-    if (settings) {
-      setOperatingHours(settings.operatingHours || []);
-      setClosedDays(settings.closedDays || []);
-      setHolidays(settings.holidays || []);
-    }
-  }, [settings]);
+  // Synchronize prop changes to state during render to avoid useEffect cascading renders
+  const [prevSettings, setPrevSettings] = useState(settings);
+  if (settings !== prevSettings) {
+    setPrevSettings(settings);
+    setOperatingHours(settings.operatingHours || []);
+    setClosedDays(settings.closedDays || []);
+    setHolidays(settings.holidays || []);
+  }
   
   // Input untuk cuti baru
   const [newHoliday, setNewHoliday] = useState('');

@@ -123,7 +123,7 @@ export default function ServicesManager({ services, onRefresh }: ServicesManager
           border: '1px solid var(--surface-border)',
           color: 'var(--foreground-muted)'
         }}>
-          Belum ada layanan yang terdaftar. Klik "+ Tambah Layanan" untuk membuat layanan pertama.
+          Belum ada layanan yang terdaftar. Klik &quot;+ Tambah Layanan&quot; untuk membuat layanan pertama.
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -248,7 +248,7 @@ export default function ServicesManager({ services, onRefresh }: ServicesManager
                   </label>
                   <select
                     value={category}
-                    onChange={(e) => setCategory(e.target.value as any)}
+                    onChange={(e) => setCategory(e.target.value as Service['category'])}
                     style={{
                       width: '100%',
                       padding: '0.75rem',

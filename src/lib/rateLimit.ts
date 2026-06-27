@@ -7,7 +7,7 @@ const tracker = new Map<string, RateLimitRecord>();
 
 // Clean up tracker every 10 minutes to prevent memory leaks in long-running processes
 if (typeof global !== 'undefined') {
-  const globalRef = global as any;
+  const globalRef = global as unknown as { rateLimitInterval?: NodeJS.Timeout };
   if (!globalRef.rateLimitInterval) {
     const interval = setInterval(() => {
       const now = Date.now();

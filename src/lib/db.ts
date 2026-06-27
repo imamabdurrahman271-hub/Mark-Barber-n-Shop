@@ -291,7 +291,7 @@ export const addWalkInQueue = async (customerName: string, serviceId: string): P
 };
 
 export const updateQueueStatus = async (id: string, status: QueueItem['status']): Promise<QueueItem | null> => {
-  const updateData: any = { status };
+  const updateData: Partial<{ status: QueueItem['status']; served_at: string }> = { status };
   if (status === 'serving') {
     updateData.served_at = new Date().toISOString();
   }

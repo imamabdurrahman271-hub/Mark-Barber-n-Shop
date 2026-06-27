@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { getBookingInitData, createBooking, SOLO_STAFF, Booking, Service } from '@/lib/db';
 
 export default function BookDesktop() {
@@ -48,7 +49,7 @@ export default function BookDesktop() {
       const savedPaymentSender = sessionStorage.getItem('book_paymentSender');
       const savedNotes = sessionStorage.getItem('book_notes');
 
-      if (savedStep) setStep(Number(savedStep) as any);
+      if (savedStep) setStep(Number(savedStep) as 1 | 2 | 3 | 4);
       if (savedServiceId) {
         setSelectedServiceId(savedServiceId);
       } else if (services.length > 0) {
@@ -921,7 +922,7 @@ export default function BookDesktop() {
               />
               <svg width="220" height="45" viewBox="0 0 220 45">
                 {Array.from({ length: 38 }).map((_, idx) => {
-                  const width = [1, 2, 3, 4][Math.floor(Math.random() * 4)];
+                  const width = [1, 2, 3, 4][Math.floor((idx * 7) % 4)];
                   const x = idx * 6;
                   return (
                     <rect key={idx} x={x} y="0" width={width} height="45" fill="var(--foreground-muted)" />
@@ -933,12 +934,12 @@ export default function BookDesktop() {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
-            <a href="/" className="btn btn-secondary" style={{ padding: '0.85rem 2rem', fontSize: '0.95rem' }}>
+            <Link href="/" className="btn btn-secondary" style={{ padding: '0.85rem 2rem', fontSize: '0.95rem' }}>
               Kembali ke Beranda
-            </a>
-            <a href="/queue" className="btn btn-primary" style={{ padding: '0.85rem 2rem', fontSize: '0.95rem' }}>
+            </Link>
+            <Link href="/queue" className="btn btn-primary" style={{ padding: '0.85rem 2rem', fontSize: '0.95rem' }}>
               Pantau Antrian Live
-            </a>
+            </Link>
             <a 
               href={`https://wa.me/6285382926336?text=${encodeURIComponent(
                 `Halo Bang Arif, saya baru saja melakukan booking online di Mark Barber n Shop.\n\n` +

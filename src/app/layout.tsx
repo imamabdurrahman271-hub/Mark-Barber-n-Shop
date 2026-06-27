@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -85,7 +86,7 @@ export default async function RootLayout({
             height: '4.5rem'
           }}>
             {/* Logo */}
-            <a href="/" style={{
+            <Link href="/" style={{
               display: 'flex',
               alignItems: 'center',
               gap: '0.75rem',
@@ -105,7 +106,7 @@ export default async function RootLayout({
                 }} 
               />
               <span>Mark Barber <span style={{ color: 'var(--primary)' }}>n Shop</span></span>
-            </a>
+            </Link>
 
             {/* Navigation Links */}
             <nav style={{
@@ -113,8 +114,8 @@ export default async function RootLayout({
               alignItems: 'center',
               gap: '2rem'
             }}>
-              <a href="/" style={{ fontWeight: 500, fontSize: '0.95rem', transition: 'color 0.2s' }} className="nav-link">Home</a>
-              <a href="/queue" style={{ fontWeight: 500, fontSize: '0.95rem', transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: '0.4rem' }} className="nav-link">
+              <Link href="/" style={{ fontWeight: 500, fontSize: '0.95rem', transition: 'color 0.2s' }} className="nav-link">Home</Link>
+              <Link href="/queue" style={{ fontWeight: 500, fontSize: '0.95rem', transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: '0.4rem' }} className="nav-link">
                 <span style={{
                   display: 'inline-block',
                   width: '8px',
@@ -124,10 +125,10 @@ export default async function RootLayout({
                   animation: 'fadeIn 1s infinite alternate'
                 }}></span>
                 Live Antrian
-              </a>
-              <a href="/book" className="btn btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem' }}>
+              </Link>
+              <Link href="/book" className="btn btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem' }}>
                 Book Now
-              </a>
+              </Link>
             </nav>
           </div>
         </header>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   getAdminInitData,
   updateBookingStatus, 
@@ -61,42 +61,48 @@ export default function AdminDesktop() {
     }
   };
 
-  const refreshData = () => {
+  const refreshData = useCallback(() => {
     setIsLoading(true);
     getAdminInitData().then(({ bookings, queues, services, settings }) => {
       setBookings(bookings);
       setQueues(queues);
       setServices(services);
       setShopSettings(settings);
-      if (services.length > 0 && !walkInServiceId) {
-        setWalkInServiceId(services[0].id);
-      }
+      setWalkInServiceId(prev => {
+        if (services.length > 0 && !prev) {
+          return services[0].id;
+        }
+        return prev;
+      });
       setIsLoading(false);
     }).catch(err => {
       console.error('Error refreshing admin data:', err);
       setIsLoading(false);
     });
-  };
+  }, []);
 
   useEffect(() => {
-    refreshData();
+    const init = async () => {
+      refreshData();
+      
+      const today = new Date();
+      const lastWeek = new Date();
+      lastWeek.setDate(today.getDate() - 7);
+      setFilterStartDate(lastWeek.toISOString().split('T')[0]);
+      setFilterEndDate(today.toISOString().split('T')[0]);
+    };
+    init();
+
     const unsubscribeBookings = subscribeToBookings(() => {
       getBookings().then(setBookings);
     });
     const unsubscribeQueue = subscribeToQueue(refreshData);
-    
-    // Set default filter to last 7 days
-    const today = new Date();
-    const lastWeek = new Date();
-    lastWeek.setDate(today.getDate() - 7);
-    setFilterStartDate(lastWeek.toISOString().split('T')[0]);
-    setFilterEndDate(today.toISOString().split('T')[0]);
 
     return () => {
       unsubscribeBookings();
       unsubscribeQueue();
     };
-  }, []);
+  }, [refreshData]);
 
   const pendingBookings = bookings.filter(b => b.status === 'pending');
   const activeQueues = queues.filter(q => q.status === 'waiting' || q.status === 'serving');
