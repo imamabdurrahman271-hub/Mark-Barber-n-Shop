@@ -356,7 +356,7 @@ export default function BookDesktop() {
               <div className="animate-fade-in">
                 <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.5rem', color: '#fff' }}>Pilih Layanan Cukur</h2>
                 <p style={{ color: 'var(--foreground-muted)', marginBottom: '2rem', fontSize: '0.95rem' }}>
-                  Layanan potong, pewarnaan, gimbal, dan perm dikerjakan personal 1-on-1 langsung oleh owner **Bang Arif**.
+                  Layanan pangkas rambut dikerjakan secara personal 1-on-1 langsung oleh owner <strong style={{ color: 'var(--primary)' }}>Bang Arif</strong>.
                 </p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
