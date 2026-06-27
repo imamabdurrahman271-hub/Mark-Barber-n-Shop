@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Mark Barber n Shop | Booking Online & Antrian Live",
     description: "Premium Barbershop. Booking jadwal mudah secara online dan pantau antrian live hari ini.",
-    url: "https://markbarbernshop.com",
+    url: "https://markbarber.vercel.app",
     siteName: "Mark Barber n Shop",
     locale: "id_ID",
     type: "website",

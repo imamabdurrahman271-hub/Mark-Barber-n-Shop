@@ -84,11 +84,10 @@ Ada pelanggan yang baru saja memesan slot online:
 • Layanan: ${serviceTitle} (Rp ${servicePrice})
 • Jadwal: ${createdBooking.bookingDate} pada jam ${createdBooking.bookingTime}
 
-💳 DETAIL PEMBAYARAN DP:
-• Pengirim: ${createdBooking.paymentSender}
-• No Referensi: ${createdBooking.paymentReference || '-'}
+💳 METODE PEMBAYARAN:
+• Pembayaran: Tunai (Bayar di Tempat)
 
-Silakan periksa mutasi rekening Anda, lalu lakukan konfirmasi pada dashboard admin:
+Silakan lakukan konfirmasi booking ini pada dashboard admin:
 https://markbarber.vercel.app/admin`;
 
       // Kirim pesan secara asynchronous (jangan memblokir response client)

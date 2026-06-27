@@ -77,9 +77,9 @@ export async function POST(request: Request) {
           // D. Kirim notifikasi WhatsApp ke Pelanggan berisi nomor antrian & link pantau live
           const customerMessage = 
 `Halo ${updatedBooking.customerName},
-
-Pembayaran DP Anda telah berhasil kami verifikasi. Booking Anda di Mark Barber n Shop telah dikonfirmasi!
-
+ 
+Booking Anda di Mark Barber n Shop telah dikonfirmasi!
+ 
 📅 DETAIL BOOKING:
 • Layanan: ${serviceTitle}
 • Jadwal: ${updatedBooking.bookingDate} pada jam ${updatedBooking.bookingTime}
