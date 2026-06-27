@@ -193,6 +193,25 @@ export default function BookDesktop() {
     setStep(3);
   };
 
+  const handleStepClick = (targetStep: number) => {
+    if (step >= 4) return;
+    if (targetStep === 1) {
+      setStep(1);
+    } else if (targetStep === 2) {
+      if (selectedServiceId) {
+        setStep(2);
+      } else {
+        alert("Silakan pilih layanan terlebih dahulu.");
+      }
+    } else if (targetStep === 3) {
+      if (selectedServiceId && selectedDate && selectedTime) {
+        setStep(3);
+      } else {
+        alert("Silakan pilih layanan dan atur jadwal terlebih dahulu.");
+      }
+    }
+  };
+
   const handleSubmitBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!customerName || !customerPhone || !paymentSender || !paymentReference) {
@@ -296,43 +315,64 @@ export default function BookDesktop() {
             { num: 1, label: "Pilih Layanan" },
             { num: 2, label: "Atur Jadwal" },
             { num: 3, label: "Konfirmasi & Bayar" }
-          ].map((s) => (
-            <div key={s.num} style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              zIndex: 2,
-              position: 'relative'
-            }}>
-              <div style={{
-                width: '2.75rem',
-                height: '2.75rem',
-                borderRadius: '50%',
-                backgroundColor: step === s.num ? 'var(--primary)' : step > s.num ? 'var(--success)' : 'var(--surface)',
-                color: step === s.num ? '#000' : '#fff',
-                border: `2px solid ${step >= s.num ? 'var(--primary)' : 'var(--surface-border)'}`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 700,
-                fontSize: '1rem',
-                boxShadow: step === s.num ? '0 0 15px var(--primary-glow)' : 'none',
-                transition: 'all 0.3s ease'
-              }}>
-                {step > s.num ? (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                ) : s.num}
+          ].map((s) => {
+            const isClickable = step < 4 && (
+              s.num === 1 ||
+              (s.num === 2 && !!selectedServiceId) ||
+              (s.num === 3 && !!selectedServiceId && !!selectedDate && !!selectedTime)
+            );
+            return (
+              <div 
+                key={s.num} 
+                onClick={() => isClickable && handleStepClick(s.num)}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  zIndex: 2,
+                  position: 'relative',
+                  cursor: isClickable ? 'pointer' : 'default',
+                  transition: 'transform 0.2s ease'
+                }}
+                onMouseOver={(e) => {
+                  if (isClickable) {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'none';
+                }}
+              >
+                <div style={{
+                  width: '2.75rem',
+                  height: '2.75rem',
+                  borderRadius: '50%',
+                  backgroundColor: step === s.num ? 'var(--primary)' : step > s.num ? 'var(--success)' : 'var(--surface)',
+                  color: step === s.num ? '#000' : '#fff',
+                  border: `2px solid ${step >= s.num ? 'var(--primary)' : 'var(--surface-border)'}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 700,
+                  fontSize: '1rem',
+                  boxShadow: step === s.num ? '0 0 15px var(--primary-glow)' : 'none',
+                  transition: 'all 0.3s ease'
+                }}>
+                  {step > s.num ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  ) : s.num}
+                </div>
+                <span style={{
+                  fontSize: '0.85rem',
+                  color: step >= s.num ? 'var(--foreground)' : 'var(--foreground-muted)',
+                  marginTop: '0.5rem',
+                  fontWeight: 600
+                }}>
+                  {s.label}
+                </span>
               </div>
-              <span style={{
-                fontSize: '0.85rem',
-                color: step >= s.num ? 'var(--foreground)' : 'var(--foreground-muted)',
-                marginTop: '0.5rem',
-                fontWeight: 600
-              }}>
-                {s.label}
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
