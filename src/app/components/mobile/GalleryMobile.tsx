@@ -77,21 +77,20 @@ export default function GalleryMobile() {
               boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)'
             }}
           >
-            {/* Image Box */}
             <div 
               onClick={() => setSelectedCert(cert)}
               style={{
                 height: '240px',
                 position: 'relative',
                 cursor: 'pointer',
-                backgroundColor: '#101012',
+                backgroundColor: '#000000',
                 borderBottom: '1px solid rgba(235, 220, 185, 0.1)'
               }}
             >
               <img 
                 src={cert.imagePath} 
                 alt={cert.title} 
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
               />
               {/* Zoom badge indicator */}
               <div style={{

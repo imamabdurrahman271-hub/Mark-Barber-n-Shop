@@ -110,7 +110,7 @@ export default function GalleryDesktop() {
                   position: 'relative',
                   cursor: 'zoom-in',
                   borderBottom: '1px solid var(--surface-border)',
-                  backgroundColor: '#101012'
+                  backgroundColor: '#000000'
                 }}
               >
                 <img 
@@ -119,7 +119,7 @@ export default function GalleryDesktop() {
                   style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'cover',
+                    objectFit: 'contain',
                     transition: 'transform 0.5s'
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
