@@ -216,30 +216,7 @@ export default async function RootLayout({
           href="https://wa.me/6285382926336" 
           target="_blank" 
           rel="noopener noreferrer"
-          style={{
-            position: 'fixed',
-            bottom: '2rem',
-            right: '2rem',
-            backgroundColor: '#25d366',
-            color: '#fff',
-            width: '3.5rem',
-            height: '3.5rem',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 4px 20px rgba(37, 211, 102, 0.4)',
-            zIndex: 9999,
-            transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'scale(1.15) rotate(5deg)';
-            e.currentTarget.style.boxShadow = '0 6px 25px rgba(37, 211, 102, 0.6)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
-            e.currentTarget.style.boxShadow = '0 4px 20px rgba(37, 211, 102, 0.4)';
-          }}
+          className="floating-wa-btn"
           aria-label="Hubungi WhatsApp"
         >
           <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
