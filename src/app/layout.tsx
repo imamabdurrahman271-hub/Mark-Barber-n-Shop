@@ -115,6 +115,7 @@ export default async function RootLayout({
               gap: '2rem'
             }}>
               <Link href="/" style={{ fontWeight: 500, fontSize: '0.95rem', transition: 'color 0.2s' }} className="nav-link">Home</Link>
+              <Link href="/gallery" style={{ fontWeight: 500, fontSize: '0.95rem', transition: 'color 0.2s' }} className="nav-link">Sertifikasi</Link>
               <Link href="/queue" style={{ fontWeight: 500, fontSize: '0.95rem', transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: '0.4rem' }} className="nav-link">
                 <span style={{
                   display: 'inline-block',
